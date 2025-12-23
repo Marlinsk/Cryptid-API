@@ -9,7 +9,7 @@ describe('Filters: Combined Filters', () => {
     repository = new MockCryptidsRepository()
   })
 
-  it('should_apply_classification_and_realm_filters', async () => {
+  it('should apply classification and realm filters', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic', realm: 'ethereal' }),
       TestFactory.createCryptid({ classification: 'cosmic', realm: 'physical' }),
@@ -29,7 +29,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.data[0].realm).toBe('ethereal')
   })
 
-  it('should_apply_multivalued_classification_and_realm_filters', async () => {
+  it('should apply multivalued classification and realm filters', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic', realm: 'ethereal' }),
       TestFactory.createCryptid({ classification: 'cosmic', realm: 'physical' }),
@@ -54,7 +54,7 @@ describe('Filters: Combined Filters', () => {
     ).toBe(true)
   })
 
-  it('should_apply_classification_realm_and_behavior_filters', async () => {
+  it('should apply classification realm and behavior filters', async () => {
     repository.setData([
       TestFactory.createCryptid({
         classification: 'cosmic',
@@ -87,7 +87,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.data[0].behavior).toBe('elusive')
   })
 
-  it('should_apply_classification_and_verification_filters', async () => {
+  it('should apply classification and verification filters', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic', isVerified: true }),
       TestFactory.createCryptid({ classification: 'cosmic', isVerified: false }),
@@ -106,7 +106,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.data[0].isVerified).toBe(true)
   })
 
-  it('should_apply_classification_and_danger_level_filters', async () => {
+  it('should apply classification and danger level filters', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic', dangerLevel: 2 }),
       TestFactory.createCryptid({ classification: 'cosmic', dangerLevel: 8 }),
@@ -125,7 +125,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.data[0].dangerLevel).toBeGreaterThanOrEqual(5)
   })
 
-  it('should_apply_all_available_filters', async () => {
+  it('should apply all available filters', async () => {
     repository.setData([
       TestFactory.createCryptid({
         classification: 'cosmic',
@@ -181,7 +181,7 @@ describe('Filters: Combined Filters', () => {
     expect(cryptid.lastSightedYear).toBeLessThanOrEqual(2024)
   })
 
-  it('should_return_empty_when_no_matches', async () => {
+  it('should return empty when no matches', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic' }),
       TestFactory.createCryptid({ classification: 'terrestrial' }),
@@ -197,7 +197,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.pagination.totalItems).toBe(0)
   })
 
-  it('should_support_or_semantics_within_same_filter', async () => {
+  it('should support or semantics within same filter', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic' }),
       TestFactory.createCryptid({ classification: 'terrestrial' }),
@@ -216,7 +216,7 @@ describe('Filters: Combined Filters', () => {
     expect(result.data.some(c => c.classification === 'terrestrial')).toBe(false)
   })
 
-  it('should_support_and_semantics_across_different_filters', async () => {
+  it('should support and semantics across different filters', async () => {
     repository.setData([
       TestFactory.createCryptid({ classification: 'cosmic', isVerified: true }),
       TestFactory.createCryptid({ classification: 'cosmic', isVerified: false }),

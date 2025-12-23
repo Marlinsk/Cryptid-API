@@ -4,12 +4,12 @@ import { SearchRateLimitExceededError } from '@/shared/errors/api-error'
 
 describe('Rate Limit: Search-Specific', () => {
   describe('Search Rate Limit Configuration', () => {
-    it('should_have_search_specific_scope', () => {
+    it('should have search specific scope', () => {
       expect(ENDPOINT_RATE_LIMITS.search.scope).toBe('search')
       expect(ENDPOINT_RATE_LIMITS.searchPlayground.scope).toBe('search')
     })
 
-    it('should_have_independent_limit_from_global', () => {
+    it('should have independent limit from global', () => {
       const searchLimit = ENDPOINT_RATE_LIMITS.search.max
       const globalLimit = RATE_LIMIT_DEFAULTS.DEFAULT_PLAN.max
 
@@ -18,7 +18,7 @@ describe('Rate Limit: Search-Specific', () => {
       expect(globalLimit).toBe(60)
     })
 
-    it('should_have_playground_limit_half_of_public', () => {
+    it('should have playground limit half of public', () => {
       const publicSearchLimit = ENDPOINT_RATE_LIMITS.search.max
       const playgroundSearchLimit = ENDPOINT_RATE_LIMITS.searchPlayground.max
 
@@ -28,7 +28,7 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('Progressive Throttling Thresholds', () => {
-    it('should_define_violation_thresholds', () => {
+    it('should define violation thresholds', () => {
       const thresholds = RATE_LIMIT_DEFAULTS.SEARCH_ABUSE_THRESHOLDS
 
       expect(thresholds.FIRST_VIOLATION).toBe(1)
@@ -36,7 +36,7 @@ describe('Rate Limit: Search-Specific', () => {
       expect(thresholds.THIRD_VIOLATION).toBe(3)
     })
 
-    it('should_define_artificial_delay', () => {
+    it('should define artificial delay', () => {
       const delay = RATE_LIMIT_DEFAULTS.SEARCH_ABUSE_THRESHOLDS.ARTIFICIAL_DELAY_MS
 
       expect(delay).toBe(500)
@@ -44,7 +44,7 @@ describe('Rate Limit: Search-Specific', () => {
       expect(delay).toBeLessThan(1000)
     })
 
-    it('should_define_temporary_block_duration', () => {
+    it('should define temporary block duration', () => {
       const blockMinutes = RATE_LIMIT_DEFAULTS.SEARCH_ABUSE_THRESHOLDS.TEMPORARY_BLOCK_MINUTES
 
       expect(blockMinutes).toBe(10)
@@ -53,14 +53,14 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('SearchRateLimitExceededError', () => {
-    it('should_have_search_specific_code', () => {
+    it('should have search specific code', () => {
       const error = new SearchRateLimitExceededError(30, '60s', 25)
 
       const response = error.toResponse()
       expect(response.error.code).toBe('SEARCH_RATE_LIMIT_EXCEEDED')
     })
 
-    it('should_always_include_search_scope', () => {
+    it('should always include search scope', () => {
       const error = new SearchRateLimitExceededError(30, '60s', 25)
 
       const response = error.toResponse()
@@ -69,7 +69,7 @@ describe('Rate Limit: Search-Specific', () => {
       }
     })
 
-    it('should_include_rate_limit_details', () => {
+    it('should include rate limit details', () => {
       const error = new SearchRateLimitExceededError(30, '60s', 25)
 
       const response = error.toResponse()
@@ -80,14 +80,14 @@ describe('Rate Limit: Search-Specific', () => {
       }
     })
 
-    it('should_have_descriptive_message', () => {
+    it('should have descriptive message', () => {
       const error = new SearchRateLimitExceededError(30, '60s', 25)
 
       expect(error.message).toContain('Search')
       expect(error.message).toContain('rate limit')
     })
 
-    it('should_expose_retry_after_for_headers', () => {
+    it('should expose retry after for headers', () => {
       const error = new SearchRateLimitExceededError(30, '60s', 45)
 
       expect(error.retryAfter).toBe(45)
@@ -95,20 +95,15 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('Independent Scope Behavior', () => {
-    it('should_not_affect_global_rate_limit', () => {
-      // This is a conceptual test - in practice, this would be tested with middleware
+    it('should not affect global rate limit', () => {
       const searchLimit = ENDPOINT_RATE_LIMITS.search.max
       const globalLimit = RATE_LIMIT_DEFAULTS.DEFAULT_PLAN.max
 
-      // A client could theoretically make:
-      // - 30 search requests (hitting search limit)
-      // - 60 list requests (within global limit)
       expect(searchLimit).toBe(30)
       expect(globalLimit).toBe(60)
     })
 
-    it('should_track_search_separately', () => {
-      // Conceptual: Search uses scope 'search' for key generation
+    it('should track search separately', () => {
       const searchScope = ENDPOINT_RATE_LIMITS.search.scope
       const listScope = ENDPOINT_RATE_LIMITS.list.scope
 
@@ -119,7 +114,7 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('Abuse Prevention', () => {
-    it('should_escalate_penalties_progressively', () => {
+    it('should escalate penalties progressively', () => {
       const thresholds = RATE_LIMIT_DEFAULTS.SEARCH_ABUSE_THRESHOLDS
 
       // First violation: simple 429
@@ -134,7 +129,7 @@ describe('Rate Limit: Search-Specific', () => {
       expect(thresholds.TEMPORARY_BLOCK_MINUTES).toBeGreaterThan(0)
     })
 
-    it('should_have_temporary_block_in_minutes', () => {
+    it('should have temporary block in minutes', () => {
       const blockMinutes = RATE_LIMIT_DEFAULTS.SEARCH_ABUSE_THRESHOLDS.TEMPORARY_BLOCK_MINUTES
       const blockSeconds = blockMinutes * 60
 
@@ -143,28 +138,28 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('Rate Limit Comparison', () => {
-    it('should_be_more_restrictive_than_global', () => {
+    it('should be more restrictive than global', () => {
       const searchMax = ENDPOINT_RATE_LIMITS.search.max
       const globalMax = RATE_LIMIT_DEFAULTS.DEFAULT_PLAN.max
 
       expect(searchMax).toBeLessThan(globalMax)
     })
 
-    it('should_be_more_restrictive_than_list', () => {
+    it('should be more restrictive than list', () => {
       const searchMax = ENDPOINT_RATE_LIMITS.search.max
       const listMax = ENDPOINT_RATE_LIMITS.list.max
 
       expect(searchMax).toBeLessThan(listMax)
     })
 
-    it('should_be_more_restrictive_than_detail', () => {
+    it('should be more restrictive than detail', () => {
       const searchMax = ENDPOINT_RATE_LIMITS.search.max
       const detailMax = ENDPOINT_RATE_LIMITS.detail.max
 
       expect(searchMax).toBeLessThan(detailMax)
     })
 
-    it('should_be_comparable_to_images', () => {
+    it('should be comparable to images', () => {
       const searchMax = ENDPOINT_RATE_LIMITS.search.max
       const imagesMax = ENDPOINT_RATE_LIMITS.images.max
 
@@ -175,7 +170,7 @@ describe('Rate Limit: Search-Specific', () => {
   })
 
   describe('Time Window Consistency', () => {
-    it('should_use_same_time_window_as_global', () => {
+    it('should use same time window as global', () => {
       const searchWindow = ENDPOINT_RATE_LIMITS.search.timeWindow
       const globalWindow = RATE_LIMIT_DEFAULTS.DEFAULT_PLAN.timeWindow
 
@@ -183,7 +178,7 @@ describe('Rate Limit: Search-Specific', () => {
       expect(searchWindow).toBe(60 * 1000) // 1 minute
     })
 
-    it('should_have_consistent_window_description', () => {
+    it('should have consistent window description', () => {
       const searchDesc = ENDPOINT_RATE_LIMITS.search.windowDescription
       const globalDesc = RATE_LIMIT_DEFAULTS.DEFAULT_PLAN.windowDescription
 

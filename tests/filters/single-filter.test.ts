@@ -10,7 +10,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Classification Filter', () => {
-    it('should_filter_by_single_classification', async () => {
+    it('should filter by single classification', async () => {
       repository.setData([
         TestFactory.createCryptidWithClassification('cosmic'),
         TestFactory.createCryptidWithClassification('terrestrial'),
@@ -27,7 +27,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data[0].classification).toBe('cosmic')
     })
 
-    it('should_filter_by_multiple_classifications', async () => {
+    it('should filter by multiple classifications', async () => {
       repository.setData([
         TestFactory.createCryptidWithClassification('cosmic'),
         TestFactory.createCryptidWithClassification('terrestrial'),
@@ -49,7 +49,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Realm Filter', () => {
-    it('should_filter_by_single_realm', async () => {
+    it('should filter by single realm', async () => {
       repository.setData([
         TestFactory.createCryptidWithRealm('ethereal'),
         TestFactory.createCryptidWithRealm('physical'),
@@ -66,7 +66,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data[0].realm).toBe('ethereal')
     })
 
-    it('should_filter_by_multiple_realms', async () => {
+    it('should filter by multiple realms', async () => {
       repository.setData([
         TestFactory.createCryptidWithRealm('ethereal'),
         TestFactory.createCryptidWithRealm('physical'),
@@ -86,7 +86,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Behavior Filter', () => {
-    it('should_filter_by_single_behavior', async () => {
+    it('should filter by single behavior', async () => {
       repository.setData([
         TestFactory.createCryptid({ behavior: 'aggressive' }),
         TestFactory.createCryptid({ behavior: 'elusive' }),
@@ -103,7 +103,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data[0].behavior).toBe('aggressive')
     })
 
-    it('should_filter_by_multiple_behaviors', async () => {
+    it('should filter by multiple behaviors', async () => {
       repository.setData([
         TestFactory.createCryptid({ behavior: 'aggressive' }),
         TestFactory.createCryptid({ behavior: 'elusive' }),
@@ -125,7 +125,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Verification Status Filter', () => {
-    it('should_filter_verified_only', async () => {
+    it('should filter verified only', async () => {
       repository.setData([
         TestFactory.createVerifiedCryptid(),
         TestFactory.createVerifiedCryptid(),
@@ -143,7 +143,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data.every(c => c.isVerified === true)).toBe(true)
     })
 
-    it('should_filter_unverified_only', async () => {
+    it('should filter unverified only', async () => {
       repository.setData([
         TestFactory.createVerifiedCryptid(),
         TestFactory.createVerifiedCryptid(),
@@ -164,7 +164,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Danger Level Range Filters', () => {
-    it('should_filter_by_minimum_danger_level', async () => {
+    it('should filter by minimum danger level', async () => {
       repository.setData([
         TestFactory.createCryptid({ dangerLevel: 2 }),
         TestFactory.createCryptid({ dangerLevel: 5 }),
@@ -182,7 +182,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data.every(c => c.dangerLevel >= 7)).toBe(true)
     })
 
-    it('should_filter_by_maximum_danger_level', async () => {
+    it('should filter by maximum danger level', async () => {
       repository.setData([
         TestFactory.createCryptid({ dangerLevel: 2 }),
         TestFactory.createCryptid({ dangerLevel: 5 }),
@@ -200,7 +200,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data.every(c => c.dangerLevel <= 5)).toBe(true)
     })
 
-    it('should_filter_by_danger_level_range', async () => {
+    it('should filter by danger level range', async () => {
       repository.setData([
         TestFactory.createCryptid({ dangerLevel: 2 }),
         TestFactory.createCryptid({ dangerLevel: 5 }),
@@ -221,7 +221,7 @@ describe('Filters: Single Value Filters', () => {
   })
 
   describe('Sighting Year Filters', () => {
-    it('should_filter_by_first_sighted_after', async () => {
+    it('should filter by first sighted after', async () => {
       repository.setData([
         TestFactory.createCryptid({ firstSightedYear: 1800 }),
         TestFactory.createCryptid({ firstSightedYear: 1900 }),
@@ -239,7 +239,7 @@ describe('Filters: Single Value Filters', () => {
       expect(result.data.every(c => c.firstSightedYear! >= 1950)).toBe(true)
     })
 
-    it('should_filter_by_last_sighted_before', async () => {
+    it('should filter by last sighted before', async () => {
       repository.setData([
         TestFactory.createCryptid({ lastSightedYear: 1950 }),
         TestFactory.createCryptid({ lastSightedYear: 1980 }),

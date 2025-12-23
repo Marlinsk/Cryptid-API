@@ -10,7 +10,7 @@ describe('Search: Full-text Search', () => {
   })
 
   describe('Basic Search', () => {
-    it('should_search_by_name', async () => {
+    it('should search by name', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow Walker' }),
         TestFactory.createCryptid({ name: 'Light Bringer' }),
@@ -23,7 +23,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.name.toLowerCase().includes('shadow'))).toBe(true)
     })
 
-    it('should_search_by_aliases', async () => {
+    it('should search by aliases', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Creature A', aliases: ['Dark One', 'Night Terror'] }),
         TestFactory.createCryptid({ name: 'Creature B', aliases: ['Light Being'] }),
@@ -35,7 +35,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(2)
     })
 
-    it('should_search_by_description', async () => {
+    it('should search by description', async () => {
       repository.setData([
         TestFactory.createCryptid({
           description: 'A mysterious shadow creature that haunts the night',
@@ -49,7 +49,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(2)
     })
 
-    it('should_search_by_origin', async () => {
+    it('should search by origin', async () => {
       repository.setData([
         TestFactory.createCryptid({ origin: 'Brazil' }),
         TestFactory.createCryptid({ origin: 'United States' }),
@@ -61,7 +61,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(2)
     })
 
-    it('should_be_case_insensitive', async () => {
+    it('should be case insensitive', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'SHADOW BEAST' }),
         TestFactory.createCryptid({ name: 'shadow creature' }),
@@ -73,7 +73,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(3)
     })
 
-    it('should_search_across_multiple_fields', async () => {
+    it('should search across multiple fields', async () => {
       repository.setData([
         TestFactory.createCryptid({
           name: 'Ancient One',
@@ -102,7 +102,7 @@ describe('Search: Full-text Search', () => {
   })
 
   describe('Search with Filters', () => {
-    it('should_combine_search_with_classification_filter', async () => {
+    it('should combine search with classification filter', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow Being', classification: 'cosmic' }),
         TestFactory.createCryptid({ name: 'Shadow Creature', classification: 'terrestrial' }),
@@ -120,7 +120,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.name.toLowerCase().includes('shadow'))).toBe(true)
     })
 
-    it('should_combine_search_with_realm_filter', async () => {
+    it('should combine search with realm filter', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Ethereal Shadow', realm: 'ethereal' }),
         TestFactory.createCryptid({ name: 'Physical Shadow', realm: 'physical' }),
@@ -137,7 +137,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.realm === 'ethereal' || c.realm === 'spectral')).toBe(true)
     })
 
-    it('should_combine_search_with_verification_filter', async () => {
+    it('should combine search with verification filter', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow One', isVerified: true }),
         TestFactory.createCryptid({ name: 'Shadow Two', isVerified: false }),
@@ -154,7 +154,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.isVerified === true)).toBe(true)
     })
 
-    it('should_combine_search_with_danger_level_filter', async () => {
+    it('should combine search with danger level filter', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow Beast', dangerLevel: 3 }),
         TestFactory.createCryptid({ name: 'Shadow Terror', dangerLevel: 9 }),
@@ -171,7 +171,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.dangerLevel >= 8)).toBe(true)
     })
 
-    it('should_combine_search_with_multiple_filters', async () => {
+    it('should combine search with multiple filters', async () => {
       repository.setData([
         TestFactory.createCryptid({
           name: 'Cosmic Shadow',
@@ -211,7 +211,7 @@ describe('Search: Full-text Search', () => {
   })
 
   describe('Empty Search Results', () => {
-    it('should_return_empty_when_no_matches', async () => {
+    it('should return empty when no matches', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Beast' }),
         TestFactory.createCryptid({ name: 'Creature' }),
@@ -223,7 +223,7 @@ describe('Search: Full-text Search', () => {
       expect(result.pagination.totalItems).toBe(0)
     })
 
-    it('should_return_empty_when_search_with_filters_no_match', async () => {
+    it('should return empty when search with filters no match', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow', classification: 'terrestrial' }),
       ])
@@ -239,7 +239,7 @@ describe('Search: Full-text Search', () => {
   })
 
   describe('Search Edge Cases', () => {
-    it('should_handle_empty_query', async () => {
+    it('should handle empty query', async () => {
       repository.setData([TestFactory.createCryptid(), TestFactory.createCryptid()])
 
       const result = await repository.search('', { page: 1, limit: 10 })
@@ -247,7 +247,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(2)
     })
 
-    it('should_handle_whitespace_query', async () => {
+    it('should handle whitespace query', async () => {
       repository.setData([TestFactory.createCryptid(), TestFactory.createCryptid()])
 
       const result = await repository.search('   ', { page: 1, limit: 10 })
@@ -255,7 +255,7 @@ describe('Search: Full-text Search', () => {
       expect(result.data).toHaveLength(2)
     })
 
-    it('should_handle_special_characters', async () => {
+    it('should handle special characters', async () => {
       repository.setData([
         TestFactory.createCryptid({ name: 'Shadow-Walker' }),
         TestFactory.createCryptid({ name: 'Night Shadow' }),

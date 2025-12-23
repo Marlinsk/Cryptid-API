@@ -3,51 +3,51 @@ import { calculateRetryAfter, ENDPOINT_RATE_LIMITS, getRateLimitConfig, isApproa
 
 describe('Rate Limit: Configuration', () => {
   describe('Rate Limit Plans', () => {
-    it('should_define_public_plan', () => {
+    it('should define public plan', () => {
       expect(RATE_LIMIT_PLANS.PUBLIC).toBeDefined()
       expect(RATE_LIMIT_PLANS.PUBLIC.max).toBe(60)
       expect(RATE_LIMIT_PLANS.PUBLIC.timeWindow).toBe(60 * 1000)
       expect(RATE_LIMIT_PLANS.PUBLIC.windowDescription).toBe('60s')
     })
 
-    it('should_define_playground_plan', () => {
+    it('should define playground plan', () => {
       expect(RATE_LIMIT_PLANS.PLAYGROUND).toBeDefined()
       expect(RATE_LIMIT_PLANS.PLAYGROUND.max).toBe(30)
       expect(RATE_LIMIT_PLANS.PLAYGROUND.timeWindow).toBe(60 * 1000)
     })
 
-    it('should_define_internal_plan', () => {
+    it('should define internal plan', () => {
       expect(RATE_LIMIT_PLANS.INTERNAL).toBeDefined()
       expect(RATE_LIMIT_PLANS.INTERNAL.max).toBe(10000)
     })
   })
 
   describe('Endpoint-Specific Limits', () => {
-    it('should_have_list_endpoint_config', () => {
+    it('should have list endpoint config', () => {
       expect(ENDPOINT_RATE_LIMITS.list).toBeDefined()
       expect(ENDPOINT_RATE_LIMITS.list.max).toBe(60)
       expect(ENDPOINT_RATE_LIMITS.list.scope).toBe('endpoint')
     })
 
-    it('should_have_detail_endpoint_config', () => {
+    it('should have detail endpoint config', () => {
       expect(ENDPOINT_RATE_LIMITS.detail).toBeDefined()
       expect(ENDPOINT_RATE_LIMITS.detail.max).toBe(120)
       expect(ENDPOINT_RATE_LIMITS.detail.scope).toBe('endpoint')
     })
 
-    it('should_have_search_endpoint_config', () => {
+    it('should have search endpoint config', () => {
       expect(ENDPOINT_RATE_LIMITS.search).toBeDefined()
       expect(ENDPOINT_RATE_LIMITS.search.max).toBe(30)
       expect(ENDPOINT_RATE_LIMITS.search.scope).toBe('search')
     })
 
-    it('should_have_search_playground_config', () => {
+    it('should have search playground config', () => {
       expect(ENDPOINT_RATE_LIMITS.searchPlayground).toBeDefined()
       expect(ENDPOINT_RATE_LIMITS.searchPlayground.max).toBe(15)
       expect(ENDPOINT_RATE_LIMITS.searchPlayground.scope).toBe('search')
     })
 
-    it('should_have_images_endpoint_config', () => {
+    it('should have images endpoint config', () => {
       expect(ENDPOINT_RATE_LIMITS.images).toBeDefined()
       expect(ENDPOINT_RATE_LIMITS.images.max).toBe(20)
       expect(ENDPOINT_RATE_LIMITS.images.scope).toBe('media')
@@ -55,7 +55,7 @@ describe('Rate Limit: Configuration', () => {
   })
 
   describe('Search Has Lower Limits', () => {
-    it('should_have_lower_limit_than_list', () => {
+    it('should have lower limit than list', () => {
       expect(ENDPOINT_RATE_LIMITS.search.max).toBeLessThan(ENDPOINT_RATE_LIMITS.list.max)
     })
 
@@ -63,7 +63,7 @@ describe('Rate Limit: Configuration', () => {
       expect(ENDPOINT_RATE_LIMITS.search.max).toBeLessThan(ENDPOINT_RATE_LIMITS.detail.max)
     })
 
-    it('should_have_playground_limit_lower_than_public', () => {
+    it('should have playground limit lower than public', () => {
       expect(ENDPOINT_RATE_LIMITS.searchPlayground.max).toBeLessThan(
         ENDPOINT_RATE_LIMITS.search.max
       )
@@ -71,35 +71,35 @@ describe('Rate Limit: Configuration', () => {
   })
 
   describe('Get Rate Limit Config', () => {
-    it('should_return_search_config_for_search_endpoint', () => {
+    it('should return search config for search endpoint', () => {
       const config = getRateLimitConfig('/cryptids/search?query=shadow')
 
       expect(config.scope).toBe('search')
       expect(config.max).toBe(30)
     })
 
-    it('should_return_images_config_for_images_endpoint', () => {
+    it('should return images config for images endpoint', () => {
       const config = getRateLimitConfig('/cryptids/123/images')
 
       expect(config.scope).toBe('media')
       expect(config.max).toBe(20)
     })
 
-    it('should_return_detail_config_for_detail_endpoint', () => {
+    it('should return detail config for detail endpoint', () => {
       const config = getRateLimitConfig('/cryptids/123')
 
       expect(config.scope).toBe('endpoint')
       expect(config.max).toBe(120)
     })
 
-    it('should_return_list_config_for_list_endpoint', () => {
+    it('should return list config for list endpoint', () => {
       const config = getRateLimitConfig('/cryptids?page=1')
 
       expect(config.scope).toBe('endpoint')
       expect(config.max).toBe(60)
     })
 
-    it('should_return_default_for_unknown_endpoint', () => {
+    it('should return default for unknown endpoint', () => {
       const config = getRateLimitConfig('/unknown')
 
       expect(config).toBeDefined()
@@ -108,7 +108,7 @@ describe('Rate Limit: Configuration', () => {
   })
 
   describe('Calculate Retry After', () => {
-    it('should_calculate_seconds_until_reset', () => {
+    it('should calculate seconds until reset', () => {
       const now = Date.now()
       const resetTime = now + 30000
 
@@ -118,7 +118,7 @@ describe('Rate Limit: Configuration', () => {
       expect(retryAfter).toBeLessThanOrEqual(31)
     })
 
-    it('should_return_0_for_past_reset_time', () => {
+    it('should return 0 for past reset time', () => {
       const pastTime = Date.now() - 1000
 
       const retryAfter = calculateRetryAfter(pastTime)
@@ -126,7 +126,7 @@ describe('Rate Limit: Configuration', () => {
       expect(retryAfter).toBeLessThanOrEqual(0)
     })
 
-    it('should_round_up_to_nearest_second', () => {
+    it('should round up to nearest second', () => {
       const now = Date.now()
       const resetTime = now + 1500
 
@@ -137,35 +137,35 @@ describe('Rate Limit: Configuration', () => {
   })
 
   describe('Is Approaching Limit', () => {
-    it('should_detect_when_approaching_limit_at_80_percent', () => {
+    it('should detect when approaching limit at 80 percent', () => {
       const limit = 100
       const remaining = 20
 
       expect(isApproachingLimit(remaining, limit)).toBe(true)
     })
 
-    it('should_not_trigger_before_threshold', () => {
+    it('should not trigger before threshold', () => {
       const limit = 100
       const remaining = 21
 
       expect(isApproachingLimit(remaining, limit)).toBe(false)
     })
 
-    it('should_trigger_at_exact_threshold', () => {
+    it('should trigger at exact threshold', () => {
       const limit = 100
       const remaining = 20
 
       expect(isApproachingLimit(remaining, limit)).toBe(true)
     })
 
-    it('should_trigger_when_almost_exhausted', () => {
+    it('should trigger when almost exhausted', () => {
       const limit = 100
       const remaining = 1
 
       expect(isApproachingLimit(remaining, limit)).toBe(true)
     })
 
-    it('should_not_trigger_when_fully_available', () => {
+    it('should not trigger when fully available', () => {
       const limit = 100
       const remaining = 100
 

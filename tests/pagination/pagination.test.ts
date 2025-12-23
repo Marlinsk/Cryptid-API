@@ -10,7 +10,7 @@ describe('Pagination: Offset-based Pagination', () => {
   })
 
   describe('Basic Pagination', () => {
-    it('should_paginate_results_with_default_limit', async () => {
+    it('should paginate results with default limit', async () => {
       const cryptids = TestFactory.createCryptids(25)
       repository.setData(cryptids)
 
@@ -23,7 +23,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.totalPages).toBe(3)
     })
 
-    it('should_return_correct_page_metadata', async () => {
+    it('should return correct page metadata', async () => {
       const cryptids = TestFactory.createCryptids(50)
       repository.setData(cryptids)
 
@@ -35,7 +35,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.totalPages).toBe(4)
     })
 
-    it('should_calculate_total_pages_correctly', async () => {
+    it('should calculate total pages correctly', async () => {
       const testCases = [
         { total: 10, limit: 5, expectedPages: 2 },
         { total: 11, limit: 5, expectedPages: 3 },
@@ -58,28 +58,28 @@ describe('Pagination: Offset-based Pagination', () => {
       repository.setData(TestFactory.createCryptids(50))
     })
 
-    it('should_have_next_on_first_page', async () => {
+    it('should have next on first page', async () => {
       const result = await repository.list({ page: 1, limit: 10 })
 
       expect(result.pagination.hasNext).toBe(true)
       expect(result.pagination.hasPrevious).toBe(false)
     })
 
-    it('should_have_previous_on_second_page', async () => {
+    it('should have previous on second page', async () => {
       const result = await repository.list({ page: 2, limit: 10 })
 
       expect(result.pagination.hasNext).toBe(true)
       expect(result.pagination.hasPrevious).toBe(true)
     })
 
-    it('should_not_have_next_on_last_page', async () => {
+    it('should not have next on last page', async () => {
       const result = await repository.list({ page: 5, limit: 10 })
 
       expect(result.pagination.hasNext).toBe(false)
       expect(result.pagination.hasPrevious).toBe(true)
     })
 
-    it('should_have_correct_navigation_on_middle_page', async () => {
+    it('should have correct navigation on middle page', async () => {
       const result = await repository.list({ page: 3, limit: 10 })
 
       expect(result.pagination.hasNext).toBe(true)
@@ -88,7 +88,7 @@ describe('Pagination: Offset-based Pagination', () => {
   })
 
   describe('Edge Cases', () => {
-    it('should_handle_empty_dataset', async () => {
+    it('should handle empty dataset', async () => {
       repository.setData([])
 
       const result = await repository.list({ page: 1, limit: 10 })
@@ -100,7 +100,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.hasPrevious).toBe(false)
     })
 
-    it('should_handle_single_item', async () => {
+    it('should handle single item', async () => {
       repository.setData(TestFactory.createCryptids(1))
 
       const result = await repository.list({ page: 1, limit: 10 })
@@ -112,7 +112,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.hasPrevious).toBe(false)
     })
 
-    it('should_handle_page_beyond_total_pages', async () => {
+    it('should handle page beyond total pages', async () => {
       repository.setData(TestFactory.createCryptids(10))
 
       const result = await repository.list({ page: 100, limit: 10 })
@@ -122,7 +122,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.totalPages).toBe(1)
     })
 
-    it('should_handle_exact_page_boundary', async () => {
+    it('should handle exact page boundary', async () => {
       repository.setData(TestFactory.createCryptids(20))
 
       const result = await repository.list({ page: 2, limit: 10 })
@@ -132,7 +132,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.hasPrevious).toBe(true)
     })
 
-    it('should_handle_partial_last_page', async () => {
+    it('should handle partial last page', async () => {
       repository.setData(TestFactory.createCryptids(23))
 
       const result = await repository.list({ page: 3, limit: 10 })
@@ -148,28 +148,28 @@ describe('Pagination: Offset-based Pagination', () => {
       repository.setData(TestFactory.createCryptids(100))
     })
 
-    it('should_handle_small_page_size', async () => {
+    it('should handle small page size', async () => {
       const result = await repository.list({ page: 1, limit: 5 })
 
       expect(result.data).toHaveLength(5)
       expect(result.pagination.totalPages).toBe(20)
     })
 
-    it('should_handle_medium_page_size', async () => {
+    it('should handle medium page size', async () => {
       const result = await repository.list({ page: 1, limit: 25 })
 
       expect(result.data).toHaveLength(25)
       expect(result.pagination.totalPages).toBe(4)
     })
 
-    it('should_handle_large_page_size', async () => {
+    it('should handle large page size', async () => {
       const result = await repository.list({ page: 1, limit: 100 })
 
       expect(result.data).toHaveLength(100)
       expect(result.pagination.totalPages).toBe(1)
     })
 
-    it('should_handle_page_size_larger_than_dataset', async () => {
+    it('should handle page size larger than dataset', async () => {
       repository.setData(TestFactory.createCryptids(10))
 
       const result = await repository.list({ page: 1, limit: 50 })
@@ -181,7 +181,7 @@ describe('Pagination: Offset-based Pagination', () => {
   })
 
   describe('Pagination with Filters', () => {
-    it('should_paginate_filtered_results', async () => {
+    it('should paginate filtered results', async () => {
       const cryptids = [
         ...TestFactory.createCryptids(30, { isVerified: true }),
         ...TestFactory.createCryptids(20, { isVerified: false }),
@@ -199,7 +199,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.totalPages).toBe(3)
     })
 
-    it('should_navigate_through_filtered_results', async () => {
+    it('should navigate through filtered results', async () => {
       const cryptids = [
         ...TestFactory.createCryptids(15, { isVerified: true }),
         ...TestFactory.createCryptids(35, { isVerified: false }),
@@ -228,7 +228,7 @@ describe('Pagination: Offset-based Pagination', () => {
   })
 
   describe('Pagination with Search', () => {
-    it('should_paginate_search_results', async () => {
+    it('should paginate search results', async () => {
       const cryptids = [
         ...TestFactory.createCryptids(25, { name: 'Shadow Beast' }),
         ...TestFactory.createCryptids(25, { name: 'Light Being' }),
@@ -242,7 +242,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(result.pagination.totalPages).toBe(3)
     })
 
-    it('should_navigate_through_search_results', async () => {
+    it('should navigate through search results', async () => {
       const cryptids = TestFactory.createCryptids(30, { name: 'Shadow Creature' })
       repository.setData(cryptids)
 
@@ -262,7 +262,7 @@ describe('Pagination: Offset-based Pagination', () => {
   })
 
   describe('Consistency', () => {
-    it('should_not_duplicate_items_across_pages', async () => {
+    it('should not duplicate items across pages', async () => {
       repository.setData(TestFactory.createCryptids(30))
 
       const page1 = await repository.list({ page: 1, limit: 10 })
@@ -279,7 +279,7 @@ describe('Pagination: Offset-based Pagination', () => {
       expect(uniqueIds.size).toBe(allIds.length)
     })
 
-    it('should_return_all_items_when_traversing_all_pages', async () => {
+    it('should return all items when traversing all pages', async () => {
       const cryptids = TestFactory.createCryptids(25)
       repository.setData(cryptids)
 

@@ -90,7 +90,6 @@ describe('API Contract Tests - Schema Validation', () => {
         physicalDescription: 'Tall and hairy',
         behaviorNotes: 'Avoids humans',
         classification: 'Terrestrial',
-        subClassifications: ['Primate-like'],
         realm: 'Physical',
         habitat: 'Forest',
         manifestationConditions: 'Night time',
@@ -102,7 +101,6 @@ describe('API Contract Tests - Schema Validation', () => {
         containmentNotes: 'No containment needed',
         images: [],
         relatedCryptids: [],
-        sources: ['Source 1', 'Source 2'],
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2024-01-15T10:30:00Z',
       }
