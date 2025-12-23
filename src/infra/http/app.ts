@@ -1,12 +1,9 @@
 import 'reflect-metadata'
 import '@infra/container'
 import { env } from '@config/env'
+import { testDatabaseConnection } from '@infra/database/connection'
 import fastify from 'fastify'
-import {
-  serializerCompiler,
-  validatorCompiler,
-  type ZodTypeProvider,
-} from 'fastify-type-provider-zod'
+import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod'
 import { setupCors } from './plugins/cors.plugin'
 import { setupErrorHandler } from './plugins/error-handler.plugin'
 import { setupRequestLogger } from './plugins/logger.plugin'
@@ -56,6 +53,8 @@ export async function buildApp() {
   await setupRequestLogger(app)
   await setupErrorHandler(app)
   await setupRoutes(app)
+
+  await testDatabaseConnection(app.log)
 
   return app
 }
