@@ -11,7 +11,6 @@ export const cryptidDetailSchema = z.object({
   physicalDescription: z.string().nullable().optional(),
   behaviorNotes: z.string().nullable().optional(),
   classification: z.string(),
-  subClassifications: z.array(z.string()).optional(),
   realm: z.string(),
   habitat: z.string(),
   manifestationConditions: z.string().nullable().optional(),
@@ -23,9 +22,9 @@ export const cryptidDetailSchema = z.object({
   containmentNotes: z.string().nullable().optional(),
   images: z.array(imageSchema).optional(),
   relatedCryptids: z.array(cryptidSummarySchema).optional(),
-  sources: z.array(z.string()).optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  // Private fields - only returned when explicitly requested via fields parameter
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 })
 
 export type CryptidDetailDTO = z.infer<typeof cryptidDetailSchema>

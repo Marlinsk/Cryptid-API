@@ -1,14 +1,50 @@
 import { z } from 'zod'
 
+// Allowed fields for CryptidDetailDTO
+export const ALLOWED_DETAIL_FIELDS = [
+  'id',
+  'name',
+  'aliases',
+  'description',
+  'originSummary',
+  'physicalDescription',
+  'behaviorNotes',
+  'classification',
+  'realm',
+  'habitat',
+  'manifestationConditions',
+  'firstReportedAt',
+  'lastReportedAt',
+  'timelineSummary',
+  'status',
+  'threatLevel',
+  'containmentNotes',
+  'images',
+  'relatedCryptids',
+  'createdAt', // Private field - only returned when explicitly requested
+  'updatedAt', // Private field - only returned when explicitly requested
+] as const
+
+export type AllowedDetailField = (typeof ALLOWED_DETAIL_FIELDS)[number]
+
+// Public fields (returned by default)
+export const PUBLIC_DETAIL_FIELDS = ALLOWED_DETAIL_FIELDS.filter(
+  field => field !== 'createdAt' && field !== 'updatedAt'
+)
+
+// Private fields (only returned when explicitly requested via fields parameter)
+export const PRIVATE_DETAIL_FIELDS = ['createdAt', 'updatedAt'] as const
+
 export const includeParamSchema = z
   .string()
   .transform(val => val.split(',').map(v => v.trim()))
-  .pipe(z.array(z.enum(['images', 'related', 'sources', 'subClassifications'])))
+  .pipe(z.array(z.enum(['images', 'related'])))
   .optional()
 
 export const fieldsParamSchema = z
   .string()
   .transform(val => val.split(',').map(v => v.trim()))
+  .pipe(z.array(z.string().min(1)))
   .optional()
 
 export const expandParamSchema = z
@@ -28,8 +64,6 @@ export type CryptidDetailQueryParams = z.infer<typeof cryptidDetailQuerySchema>
 export type IncludeOptions = {
   images?: boolean
   related?: boolean
-  sources?: boolean
-  subClassifications?: boolean
 }
 
 export function parseIncludeOptions(include?: string[]): IncludeOptions {
@@ -38,7 +72,30 @@ export function parseIncludeOptions(include?: string[]): IncludeOptions {
   return {
     images: include.includes('images'),
     related: include.includes('related'),
-    sources: include.includes('sources'),
-    subClassifications: include.includes('subClassifications'),
   }
+}
+
+export interface FieldSelectionOptions {
+  fields?: string[]
+}
+
+export function parseFieldsOptions(fields?: string[]): FieldSelectionOptions {
+  if (!fields || fields.length === 0) {
+    return {}
+  }
+
+  // Filter only allowed fields
+  const validFields = fields.filter(field =>
+    ALLOWED_DETAIL_FIELDS.includes(field as AllowedDetailField)
+  )
+
+  return {
+    fields: validFields.length > 0 ? validFields : undefined,
+  }
+}
+
+export function getInvalidFields(requestedFields: string[]): string[] {
+  return requestedFields.filter(
+    field => !ALLOWED_DETAIL_FIELDS.includes(field as AllowedDetailField)
+  )
 }

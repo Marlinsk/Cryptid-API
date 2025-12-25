@@ -99,7 +99,6 @@ Searches in fields: `name`, `description`, `originSummary`
   "physicalDescription": "string | null",
   "behaviorNotes": "string | null",
   "classification": "string",
-  "subClassifications": ["string"] (optional),
   "realm": "string",
   "habitat": "string",
   "manifestationConditions": "string | null",
@@ -110,28 +109,38 @@ Searches in fields: `name`, `description`, `originSummary`
   "threatLevel": "string",
   "containmentNotes": "string | null",
   "images": [/* array of ImageDTO */] (optional),
-  "relatedCryptids": [/* array of CryptidSummaryDTO */] (optional),
-  "sources": ["string"] (optional),
+  "relatedCryptids": [/* array of CryptidSummaryDTO */] (optional)
+}
+```
+
+**Private Fields** (not included by default):
+```json
+{
   "createdAt": "ISO 8601 string",
   "updatedAt": "ISO 8601 string"
 }
 ```
 
-**Query Parameters** (inclusion control):
+> **Note**: `createdAt` and `updatedAt` are private fields that are NOT included in responses by default. They must be explicitly requested using the `fields` parameter.
 
-- `include`: defines which relations to include (comma-separated)
+**Query Parameters** (inclusion and field control):
+
+- `include`: ✅ **Implemented** - defines which relations to include (comma-separated)
   - `images` - includes images
   - `related` - includes related cryptids
-  - `sources` - includes sources
-  - `subClassifications` - includes subclassifications
 
   Example: `?include=images,related`
 
-- `fields`: defines which fields to return (comma-separated)
+- `fields`: ✅ **Implemented** - defines which fields to return (comma-separated)
+  - Allows sparse fieldsets to reduce bandwidth
+  - Only returns requested fields
+  - Invalid fields are filtered out automatically
+  - **Private fields** (`createdAt`, `updatedAt`) must be explicitly requested
   - Example: `?fields=id,name,description,status`
-  - **NOTE**: Not yet implemented
+  - Example with private fields: `?fields=id,name,createdAt,updatedAt`
+  - Can be combined with `include`: `?include=images&fields=id,name,images,status`
 
-- `expand`: controls depth of nested resources
+- `expand`: 🚧 **Planned** - controls depth of nested resources
   - `images.metadata` - expands image metadata
   - Example: `?expand=images.metadata`
   - **NOTE**: Not yet implemented
@@ -208,20 +217,6 @@ Location: `src/modules/cryptids/infra/repositories/drizzle-cryptids.repository.t
 4. **Simple playground**: Easy to test and visualize different data levels
 5. **Efficient cache**: Summary shapes are ideal for long-duration caching
 
----
-
-## TODOs / Next Steps
-
-- [ ] Implement field selection (`fields` parameter)
-- [ ] Implement expand logic (`expand` parameter)
-- [ ] Create migrations for new database fields
-- [ ] Implement subclassifications and sources
-- [ ] Add unit tests for mappers
-- [ ] Add integration tests for new endpoints
-- [ ] Document usage examples in README
-
----
-
 ## Usage Examples
 
 ### List all cryptids (Summary)
@@ -246,5 +241,38 @@ GET /cryptids/1?include=images
 
 ### Get cryptid with all related data
 ```bash
-GET /cryptids/1?include=images,related,sources,subClassifications
+GET /cryptids/1?include=images,related
+```
+
+### Get cryptid with specific fields only
+```bash
+# Minimal response
+GET /cryptids/1?fields=id,name,status
+
+# Essential info only
+GET /cryptids/1?fields=id,name,description,threatLevel,status
+```
+
+### Combine fields with include
+```bash
+# Get only id, name, and images (with images data)
+GET /cryptids/1?include=images&fields=id,name,images
+
+# Efficient response for mobile
+GET /cryptids/1?fields=id,name,shortDescription,status,threatLevel
+```
+
+### Private fields (timestamps)
+```bash
+# Default response - NO timestamps
+GET /cryptids/1
+# Returns: all fields EXCEPT createdAt and updatedAt
+
+# Explicitly request timestamps
+GET /cryptids/1?fields=id,name,status,createdAt,updatedAt
+# Returns: only id, name, status, createdAt, updatedAt
+
+# Only timestamps (for audit purposes)
+GET /cryptids/1?fields=createdAt,updatedAt
+# Returns: only createdAt and updatedAt
 ```

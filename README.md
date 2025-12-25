@@ -1,6 +1,6 @@
 # Cryptid API
 
-REST API developed with TypeScript, Fastify, Drizzle ORM following DDD (Domain-Driven Design) and Clean Architecture principles.
+A REST API for cryptid information, developed with TypeScript, Fastify, and Drizzle ORM following Domain-Driven Design (DDD) and Clean Architecture principles.
 
 ## Technologies
 
@@ -128,7 +128,7 @@ pnpm db:push
 pnpm dev
 ```
 
-## Endpoints
+## API Endpoints
 
 The API will be available at `http://localhost:3000`
 
@@ -136,19 +136,32 @@ The API will be available at `http://localhost:3000`
 - Swagger UI: `http://localhost:3000/docs`
 
 ### Health Check
-- `GET /health` - API status
+- `GET /health` - Check API health status
 
 ### Cryptids
-- `POST /api/v1/cryptids` - Create cryptid
-- `GET /api/v1/cryptids` - List all
-- `GET /api/v1/cryptids/:id` - Get by ID
+- `GET /api/v1/cryptids` - List all cryptids (with filtering, search, pagination)
+- `GET /api/v1/cryptids/:id` - Get cryptid details by ID
 
-## Code Patterns
+## Documentation
 
-- **Either Pattern**: For functional error handling
+Comprehensive documentation is available in the [docs/](docs/) directory:
+
+- [**Parameters**](docs/PARAMETERS.md) - Complete query parameters reference
+- [**Error Handling**](docs/ERROR_HANDLING.md) - Error response patterns and codes
+- [**Filters**](docs/FILTERS.md) - Filtering and search capabilities
+- [**Pagination**](docs/PAGINATION.md) - Pagination implementation
+- [**Rate Limiting**](docs/RATE_LIMITING.md) - Rate limiting policies
+- [**Search Rate Limiting**](docs/SEARCH_RATE_LIMITING.md) - Search-specific limits
+- [**Response Shapes**](docs/RESPONSE_SHAPES.md) - Summary and Detail responses
+- [**Testing**](docs/TESTING.md) - Test suite and coverage
+
+## Design Patterns
+
+- **Either Pattern**: Functional error handling
 - **Dependency Injection**: TSyringe for inversion of control
 - **Repository Pattern**: Data layer abstraction
-- **DTO Pattern**: Data Transfer Objects for validation
+- **DTO Pattern**: Data Transfer Objects with Zod validation
+- **Use Case Pattern**: Application business logic encapsulation
 
 ## Adding New Modules
 

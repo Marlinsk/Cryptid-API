@@ -1,5 +1,6 @@
 import type { Cryptid } from '@/modules/cryptids/domain/entities/cryptid.entity'
 import type { Image } from '@/modules/cryptids/domain/entities/image.entity'
+import { pickFields } from '@/shared/utils/field-selector'
 import type { CryptidDetailDTO, CryptidSummaryDTO } from '../dtos'
 import { ImageMapper } from './image.mapper'
 
@@ -11,8 +12,10 @@ export interface CryptidWithRelations {
   hasImages?: boolean
   images?: Image[]
   relatedCryptids?: Array<CryptidWithRelations>
-  subClassifications?: string[]
-  sources?: string[]
+}
+
+export interface MapperOptions {
+  fields?: string[]
 }
 
 export class CryptidMapper {
@@ -34,7 +37,10 @@ export class CryptidMapper {
     }
   }
 
-  static toDetail(data: CryptidWithRelations): CryptidDetailDTO {
+  static toDetail(
+    data: CryptidWithRelations,
+    options?: MapperOptions
+  ): Partial<CryptidDetailDTO> {
     const {
       cryptid,
       classification,
@@ -42,11 +48,10 @@ export class CryptidMapper {
       habitat,
       images,
       relatedCryptids,
-      subClassifications,
-      sources,
     } = data
 
-    return {
+    // Base detail object without private fields
+    const baseDetail: Omit<CryptidDetailDTO, 'createdAt' | 'updatedAt'> = {
       id: cryptid.id,
       name: cryptid.name,
       aliases: cryptid.aliases,
@@ -55,7 +60,6 @@ export class CryptidMapper {
       physicalDescription: cryptid.physicalDescription,
       behaviorNotes: cryptid.behaviorNotes,
       classification,
-      subClassifications,
       realm,
       habitat,
       manifestationConditions: cryptid.manifestationConditions,
@@ -67,9 +71,21 @@ export class CryptidMapper {
       containmentNotes: cryptid.containmentNotes,
       images: images?.map(ImageMapper.toDTO),
       relatedCryptids: relatedCryptids?.map(CryptidMapper.toSummary),
-      sources,
+    }
+
+    // Full detail with private fields (only used when explicitly requested)
+    const fullDetail: CryptidDetailDTO = {
+      ...baseDetail,
       createdAt: cryptid.createdAt.toISOString(),
       updatedAt: cryptid.updatedAt.toISOString(),
     }
+
+    // Apply field selection if specified
+    if (options?.fields && options.fields.length > 0) {
+      return pickFields(fullDetail, options.fields)
+    }
+
+    // Return without private fields by default
+    return baseDetail
   }
 }
