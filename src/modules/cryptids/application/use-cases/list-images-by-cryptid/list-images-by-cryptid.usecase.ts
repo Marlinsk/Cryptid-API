@@ -19,7 +19,6 @@ export class ListImagesByCryptidUseCase {
     try {
       const filters = {
         cryptidId: dto.cryptidId,
-        license: dto.license,
       }
 
       const pagination = {
