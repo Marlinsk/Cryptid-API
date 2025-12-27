@@ -198,18 +198,6 @@ describe('API Contract Tests - Schema Validation', () => {
       expect(result.success).toBe(true)
     })
 
-    it('should validate query with range filters', () => {
-      const validData = {
-        threatLevelMin: 3,
-        threatLevelMax: 8,
-        page: 1,
-        limit: 20,
-      }
-
-      const result = listCryptidsSchema.safeParse(validData)
-      expect(result.success).toBe(true)
-    })
-
     it('should validate query with boolean filters', () => {
       const validData = {
         hasImages: 'true',
@@ -219,28 +207,6 @@ describe('API Contract Tests - Schema Validation', () => {
 
       const result = listCryptidsSchema.safeParse(validData)
       expect(result.success).toBe(true)
-    })
-
-    it('should reject invalid threat level range', () => {
-      const invalidData = {
-        threatLevelMin: -1, // Invalid: below 0
-        page: 1,
-        limit: 20,
-      }
-
-      const result = listCryptidsSchema.safeParse(invalidData)
-      expect(result.success).toBe(false)
-    })
-
-    it('should reject invalid threat level range max', () => {
-      const invalidData = {
-        threatLevelMax: 11, // Invalid: above 10
-        page: 1,
-        limit: 20,
-      }
-
-      const result = listCryptidsSchema.safeParse(invalidData)
-      expect(result.success).toBe(false)
     })
 
     it('should validate search parameter', () => {

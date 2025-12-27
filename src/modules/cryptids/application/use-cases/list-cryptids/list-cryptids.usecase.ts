@@ -7,7 +7,7 @@ import type { CryptidSummaryDTO } from '../../dtos'
 import { CryptidMapper } from '../../mappers'
 import type { ListCryptidsDTO } from './list-cryptids.dto'
 
-type Response = Either<AppError, PaginatedResult<CryptidSummaryDTO>>
+type Response = Either<AppError, PaginatedResult<Partial<CryptidSummaryDTO> & { createdAt?: string; updatedAt?: string }>>
 
 @injectable()
 export class ListCryptidsUseCase {
@@ -26,8 +26,6 @@ export class ListCryptidsUseCase {
         threatLevel: dto.threatLevel,
         hasImages: dto.hasImages,
         search: dto.search,
-        threatLevelMin: dto.threatLevelMin,
-        threatLevelMax: dto.threatLevelMax,
       }
 
       const pagination = {
@@ -42,7 +40,8 @@ export class ListCryptidsUseCase {
 
       const result = await this.cryptidsRepository.findWithFilters(filters, pagination, sort)
 
-      const summaries = result.data.map(item => CryptidMapper.toSummary(item))
+      const mapperOptions = dto.fields ? { fields: dto.fields } : undefined
+      const summaries = result.data.map(item => CryptidMapper.toSummary(item, mapperOptions))
 
       return right({
         data: summaries,
