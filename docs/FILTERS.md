@@ -155,43 +155,6 @@ GET /cryptids?realm=1&hasImages=true&threatLevel=high
 
 ---
 
-### 4. Range Filters
-
-Filters that define **numeric ranges** (min/max).
-
-#### Available Filters
-
-| Filter            | Type   | Range | Description                        | Example             |
-| ----------------- | ------ | ----- | ---------------------------------- | ------------------- |
-| `threatLevelMin`  | number | 0-10  | Minimum threat level (inclusive)   | `threatLevelMin=5`  |
-| `threatLevelMax`  | number | 0-10  | Maximum threat level (inclusive)   | `threatLevelMax=8`  |
-
-#### Behavior
-
-* `threatLevelMin=5` → Returns cryptids with threatLevel >= 5
-* `threatLevelMax=8` → Returns cryptids with threatLevel <= 8
-* `threatLevelMin=5&threatLevelMax=8` → Returns cryptids with threatLevel between 5 and 8 (inclusive)
-
-**Note**: These filters are prepared for future use when the `threatLevel` field becomes numeric.
-
-#### Examples
-
-```bash
-# Minimum threat of 7
-GET /cryptids?threatLevelMin=7
-
-# Maximum threat of 5
-GET /cryptids?threatLevelMax=5
-
-# Threat between 5 and 8
-GET /cryptids?threatLevelMin=5&threatLevelMax=8
-
-# Combine with other filters
-GET /cryptids?realm=1&threatLevelMin=7&hasImages=true
-```
-
----
-
 ## Sorting (Sort)
 
 Controls the **order** of results before pagination.
@@ -231,7 +194,7 @@ All filters can be combined freely following the pipeline.
 ### Complex Example
 
 ```bash
-GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&threatLevelMin=5&sort=lastReportedAt&order=desc&page=2&limit=20
+GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&threatLevel=high,critical&sort=lastReportedAt&order=desc&page=2&limit=20
 ```
 
 **Interpretation**:
@@ -241,7 +204,7 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
    - AND Classification 3
    - AND Status "reported" OR "verified"
    - AND Has images
-   - AND ThreatLevel >= 5
+   - AND ThreatLevel high OR critical
 3. **Sort**: Sort by `lastReportedAt` descending
 4. **Pagination**: Return page 2 with 20 items
 
@@ -254,7 +217,6 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 | **Search**    | `search`                                                   | OR between fields  | `search=watcher`                 |
 | **Simple**    | `habitat`, `realm`, `classification`, `status`, `threatLevel` | OR multi-valued, AND between filters | `habitat=1,2&realm=3`            |
 | **Boolean**   | `hasImages`                                | Presence/absence   | `hasImages=true`                 |
-| **Range**     | `threatLevelMin`, `threatLevelMax`                         | Numeric range      | `threatLevelMin=5&threatLevelMax=8` |
 | **Sort**      | `sort`, `order`                                            | Sorting            | `sort=name&order=asc`            |
 | **Pagination**| `page`, `limit`                                            | Offset+limit       | `page=2&limit=50`                |
 
@@ -268,7 +230,6 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 * **Numeric filters**: positive integers
 * **Multi-valued filters**: individual validation of each value
 * **Booleans**: "true" or "false" (case-insensitive)
-* **Range**: numbers between 0 and 10
 * **Sort**: only allowed fields (see list above)
 * **Order**: only "asc" or "desc"
 * **Page**: number >= 1

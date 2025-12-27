@@ -72,8 +72,7 @@ export function extractAppliedFilters(params: Record<string, any>): AppliedFilte
     'status',
     'threatLevel',
     'hasImages',
-    'threatLevelMin',
-    'threatLevelMax',
+    'categoryType',
   ]
 
   for (const field of filterFields) {

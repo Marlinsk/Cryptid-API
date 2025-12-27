@@ -174,41 +174,6 @@ GET /api/v1/cryptids?realm=1&hasImages=true&status=verified
 
 ---
 
-#### 3.3 Range Filters
-
-Filter by numeric ranges (inclusive).
-
-| Parameter         | Type   | Min | Max | Description                             |
-| ----------------- | ------ | --- | --- | --------------------------------------- |
-| `threatLevelMin`  | number | 0   | 10  | Minimum threat level (inclusive)        |
-| `threatLevelMax`  | number | 0   | 10  | Maximum threat level (inclusive)        |
-
-#### Behavior
-
-* `threatLevelMin=5` - Returns cryptids with threat level ≥ 5
-* `threatLevelMax=8` - Returns cryptids with threat level ≤ 8
-* Both parameters - Returns cryptids within range (5 ≤ threat ≤ 8)
-
-#### Examples
-
-```bash
-# Minimum threat level of 7
-GET /api/v1/cryptids?threatLevelMin=7
-
-# Maximum threat level of 5
-GET /api/v1/cryptids?threatLevelMax=5
-
-# Threat level between 5 and 8
-GET /api/v1/cryptids?threatLevelMin=5&threatLevelMax=8
-
-# Combined with other filters
-GET /api/v1/cryptids?realm=1&threatLevelMin=7&hasImages=true
-```
-
-**Note**: These filters are prepared for future use when the `threatLevel` field becomes numeric.
-
----
-
 ### 4. Sorting Parameters
 
 Control the order of results before pagination.
@@ -400,7 +365,7 @@ Parameters are processed in this order:
 ### Complex Example
 
 ```bash
-GET /api/v1/cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&threatLevelMin=5&sort=lastReportedAt&order=desc&page=2&limit=20
+GET /api/v1/cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&sort=lastReportedAt&order=desc&page=2&limit=20
 ```
 
 **Interpretation**:
@@ -411,7 +376,6 @@ GET /api/v1/cryptids?search=shadow&realm=1,2&classification=3&status=reported,ve
    - AND Classification 3
    - AND Status "reported" OR "verified"
    - AND Has images
-   - AND Threat level ≥ 5
 3. Sort by `lastReportedAt` descending
 4. Return page 2 with 20 items per page
 
@@ -550,8 +514,6 @@ interface CryptidListQueryParams {
   status?: string | string[];
   threatLevel?: string | string[];
   hasImages?: boolean;
-  threatLevelMin?: number;
-  threatLevelMax?: number;
   sort?: string;
   order?: 'asc' | 'desc';
   page?: number;
@@ -575,8 +537,6 @@ function buildListQueryString(params: CryptidListQueryParams): string {
   if (params.status) urlParams.append('status', Array.isArray(params.status) ? params.status.join(',') : params.status);
   if (params.threatLevel) urlParams.append('threatLevel', Array.isArray(params.threatLevel) ? params.threatLevel.join(',') : params.threatLevel);
   if (params.hasImages !== undefined) urlParams.append('hasImages', String(params.hasImages));
-  if (params.threatLevelMin !== undefined) urlParams.append('threatLevelMin', String(params.threatLevelMin));
-  if (params.threatLevelMax !== undefined) urlParams.append('threatLevelMax', String(params.threatLevelMax));
   if (params.sort) urlParams.append('sort', params.sort);
   if (params.order) urlParams.append('order', params.order);
   if (params.page) urlParams.append('page', String(params.page));
@@ -629,7 +589,7 @@ const detailQueryWithFields = buildDetailQueryString({
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- | ----------- |
 | **Pagination**    | `page`, `limit`                                                   | Control result pages             | ✅ Implemented |
 | **Search**        | `search`                                                          | Full-text search                 | ✅ Implemented |
-| **Filters**       | `habitat`, `realm`, `classification`, `status`, `threatLevel`, `hasImages`, `threatLevelMin`, `threatLevelMax` | Filter results | ✅ Implemented |
+| **Filters**       | `habitat`, `realm`, `classification`, `status`, `threatLevel`, `hasImages` | Filter results | ✅ Implemented |
 | **Sorting**       | `sort`, `order`                                                   | Order results                    | ✅ Implemented |
 | **Relationships** | `include` (✅), `fields` (✅), `expand` (🚧)                      | Control included data & fields   | Partial     |
 
@@ -656,8 +616,7 @@ GET /api/v1/cryptids?
   classification=3&           # Single filter
   status=reported,verified&   # Multi-valued filter (OR)
   hasImages=true&             # Boolean filter
-  threatLevelMin=5&           # Range filter (min)
-  threatLevelMax=9&           # Range filter (max)
+  threatLevel=high,critical&  # Multi-valued filter (OR)
   sort=lastReportedAt&        # Sort field
   order=desc&                 # Sort order
   page=2&                     # Page number
@@ -670,6 +629,6 @@ This produces results that are:
 3. AND classification 3
 4. AND status reported OR verified
 5. AND have images
-6. AND threat level between 5-9
+6. AND threat level high OR critical
 7. Sorted by last reported date (newest first)
 8. Page 2 with 20 items

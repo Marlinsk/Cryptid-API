@@ -10,8 +10,6 @@ export const listCryptidsSchema = z.object({
   status: z.union([z.string().min(1), multivaluedStringSchema]).optional(),
   threatLevel: z.union([z.string().min(1), multivaluedStringSchema]).optional(),
   hasImages: booleanFilterSchema.optional(),
-  threatLevelMin: z.coerce.number().int().min(0).max(10).optional(),
-  threatLevelMax: z.coerce.number().int().min(0).max(10).optional(),
   page: paginationQuerySchema.shape.page,
   limit: paginationQuerySchema.shape.limit,
   sort: z.enum(orderableFields).optional(),

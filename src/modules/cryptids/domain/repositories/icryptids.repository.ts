@@ -10,8 +10,6 @@ export interface ListCryptidsFilters {
   status?: string | string[]
   threatLevel?: string | string[]
   hasImages?: boolean
-  threatLevelMin?: number
-  threatLevelMax?: number
 }
 
 export interface CryptidWithRelations {

@@ -26,8 +26,6 @@ export class ListCryptidsUseCase {
         threatLevel: dto.threatLevel,
         hasImages: dto.hasImages,
         search: dto.search,
-        threatLevelMin: dto.threatLevelMin,
-        threatLevelMax: dto.threatLevelMax,
       }
 
       const pagination = {
