@@ -19,10 +19,10 @@ export interface MapperOptions {
 }
 
 export class CryptidMapper {
-  static toSummary(data: CryptidWithRelations): CryptidSummaryDTO {
+  static toSummary(data: CryptidWithRelations, options?: MapperOptions): Partial<CryptidSummaryDTO> & { createdAt?: string; updatedAt?: string } {
     const { cryptid, classification, realm, habitat, hasImages = false } = data
 
-    return {
+    const baseSummary: CryptidSummaryDTO = {
       id: cryptid.id,
       name: cryptid.name,
       aliases: cryptid.aliases,
@@ -35,6 +35,18 @@ export class CryptidMapper {
       shortDescription: cryptid.shortDescription,
       lastReportedAt: cryptid.lastReportedAt?.toISOString() || null,
     }
+
+    const fullSummary = {
+      ...baseSummary,
+      createdAt: cryptid.createdAt.toISOString(),
+      updatedAt: cryptid.updatedAt.toISOString(),
+    }
+
+    if (options?.fields && options.fields.length > 0) {
+      return pickFields(fullSummary, options.fields)
+    }
+
+    return baseSummary
   }
 
   static toDetail(
@@ -50,7 +62,6 @@ export class CryptidMapper {
       relatedCryptids,
     } = data
 
-    // Base detail object without private fields
     const baseDetail: Omit<CryptidDetailDTO, 'createdAt' | 'updatedAt'> = {
       id: cryptid.id,
       name: cryptid.name,
@@ -70,22 +81,19 @@ export class CryptidMapper {
       threatLevel: cryptid.threatLevel,
       containmentNotes: cryptid.containmentNotes,
       images: images?.map(ImageMapper.toDTO),
-      relatedCryptids: relatedCryptids?.map(CryptidMapper.toSummary),
+      relatedCryptids: relatedCryptids?.map(rc => CryptidMapper.toSummary(rc)) as CryptidSummaryDTO[],
     }
 
-    // Full detail with private fields (only used when explicitly requested)
     const fullDetail: CryptidDetailDTO = {
       ...baseDetail,
       createdAt: cryptid.createdAt.toISOString(),
       updatedAt: cryptid.updatedAt.toISOString(),
     }
 
-    // Apply field selection if specified
     if (options?.fields && options.fields.length > 0) {
       return pickFields(fullDetail, options.fields)
     }
 
-    // Return without private fields by default
     return baseDetail
   }
 }
