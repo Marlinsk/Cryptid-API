@@ -141,6 +141,7 @@ The API will be available at `http://localhost:3000`
 ### Cryptids
 - `GET /api/v1/cryptids` - List all cryptids (with filtering, search, pagination)
 - `GET /api/v1/cryptids/:id` - Get cryptid details by ID
+- `GET /api/v1/cryptids/:id/images` - Get all images for a specific cryptid (paginated)
 
 ### Classifications
 - `GET /api/v1/cryptids/classifications` - List all classifications (with optional category type filter)
@@ -151,6 +152,7 @@ Comprehensive documentation is available in the [docs/](docs/) directory:
 
 - [**Parameters**](docs/PARAMETERS.md) - Complete query parameters reference
 - [**Classifications**](docs/CLASSIFICATIONS.md) - Classifications endpoint documentation
+- [**Images**](docs/IMAGES.md) - Images endpoint documentation
 - [**Error Handling**](docs/ERROR_HANDLING.md) - Error response patterns and codes
 - [**Filters**](docs/FILTERS.md) - Filtering and search capabilities
 - [**Pagination**](docs/PAGINATION.md) - Pagination implementation

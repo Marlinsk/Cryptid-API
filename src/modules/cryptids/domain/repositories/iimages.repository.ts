@@ -3,7 +3,6 @@ import type { Image } from '../entities/image.entity'
 
 export interface ListImagesFilters {
   cryptidId: number
-  license?: string
 }
 
 export interface IImagesRepository {
