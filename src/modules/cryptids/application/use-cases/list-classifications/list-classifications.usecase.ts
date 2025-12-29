@@ -7,7 +7,7 @@ import { ClassificationMapper } from '../../mappers/classification.mapper'
 import type { IClassificationsRepository } from '../../../domain/repositories/iclassifications.repository'
 import type { ListClassificationsDTO } from './list-classifications.dto'
 
-type Response = Either<AppError, PaginatedResult<Partial<ClassificationDTO> & { createdAt?: string; updatedAt?: string }>>
+type Response = Either<AppError, PaginatedResult<Partial<ClassificationDTO> & { createdAt?: string }>>
 
 @injectable()
 export class ListClassificationsUseCase {

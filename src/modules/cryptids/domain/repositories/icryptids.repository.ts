@@ -4,8 +4,6 @@ import type { Image } from '../entities/image.entity'
 
 export interface ListCryptidsFilters {
   search?: string
-  habitat?: number | number[]
-  realm?: number | number[]
   classification?: number | number[]
   status?: string | string[]
   threatLevel?: string | string[]
@@ -15,8 +13,6 @@ export interface ListCryptidsFilters {
 export interface CryptidWithRelations {
   cryptid: Cryptid
   classification: string
-  realm: string
-  habitat: string
   hasImages: boolean
 }
 
@@ -35,8 +31,6 @@ export interface ICryptidsRepository {
   ): Promise<{
     cryptid: Cryptid
     classification: string
-    realm: string
-    habitat: string
     images?: Image[]
     relatedCryptids?: CryptidWithRelations[]
     subClassifications?: string[]
@@ -55,7 +49,7 @@ export interface ICryptidsRepository {
   ): Promise<PaginatedResult<CryptidWithRelations>>
   findRelated(
     cryptidId: number,
-    relationType: 'similarHabitat' | 'sameRealm' | 'sameClassification'
+    relationType: 'sameClassification'
   ): Promise<CryptidWithRelations[]>
   hasImages(cryptidId: number): Promise<boolean>
 }

@@ -20,7 +20,7 @@ export class SearchCryptidsUseCase {
     try {
       const filters = {
         classification: dto.classification,
-        realm: dto.realm,
+        
       }
 
       const pagination = {

@@ -8,7 +8,6 @@ export class ImageMapper {
       url: image.url,
       altText: image.altText,
       source: image.source,
-      license: image.license,
     }
   }
 }

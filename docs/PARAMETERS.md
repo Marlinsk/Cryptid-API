@@ -77,7 +77,6 @@ GET /api/v1/cryptids?search=watcher
 GET /api/v1/cryptids?search=cosmic&page=1&limit=10
 
 # Search combined with filters
-GET /api/v1/cryptids?search=shadow&realm=1&hasImages=true
 ```
 
 See [FILTERS.md](./FILTERS.md) and [SEARCH_RATE_LIMITING.md](./SEARCH_RATE_LIMITING.md) for more information.
@@ -92,8 +91,6 @@ Filter by exact matches or multiple values (OR semantics).
 
 | Parameter        | Type            | Multiple Values | Description                              |
 | ---------------- | --------------- | --------------- | ---------------------------------------- |
-| `habitat`        | number          | Yes             | Filter by habitat ID(s)                  |
-| `realm`          | number          | Yes             | Filter by realm ID(s)                    |
 | `classification` | number          | Yes             | Filter by classification ID(s)           |
 | `status`         | string          | Yes             | Filter by status value(s)                |
 | `threatLevel`    | string          | Yes             | Filter by threat level(s)                |
@@ -104,7 +101,6 @@ Use comma-separated values for OR semantics:
 
 ```bash
 # Habitat 1 OR 2 OR 3
-GET /api/v1/cryptids?habitat=1,2,3
 
 # Status "reported" OR "verified"
 GET /api/v1/cryptids?status=reported,verified
@@ -131,16 +127,13 @@ GET /api/v1/cryptids?threatLevel=high,critical
 
 ```bash
 # Single filter
-GET /api/v1/cryptids?realm=1
 
 # Multiple filters (AND semantics)
-GET /api/v1/cryptids?realm=1&status=verified&threatLevel=high
 
 # Multi-valued filter
 GET /api/v1/cryptids?classification=1,2,3
 
 # Complex combination
-GET /api/v1/cryptids?realm=1,2&habitat=3,4&status=reported,verified
 ```
 
 ---
@@ -169,7 +162,6 @@ GET /api/v1/cryptids?hasImages=true
 GET /api/v1/cryptids?hasImages=false
 
 # Combined with other filters
-GET /api/v1/cryptids?realm=1&hasImages=true&status=verified
 ```
 
 ---
@@ -180,7 +172,6 @@ Control the order of results before pagination.
 
 | Parameter | Type   | Default | Allowed Values                                                                              |
 | --------- | ------ | ------- | ------------------------------------------------------------------------------------------- |
-| `sort`    | string | `id`    | `id`, `name`, `status`, `threatLevel`, `firstReportedAt`, `lastReportedAt`, `createdAt`, `updatedAt` |
 | `order`   | string | `asc`   | `asc`, `desc`                                                                               |
 
 #### Behavior
@@ -199,13 +190,11 @@ GET /api/v1/cryptids?sort=name&order=asc
 GET /api/v1/cryptids?sort=name&order=desc
 
 # Sort by last reported date (most recent first)
-GET /api/v1/cryptids?sort=lastReportedAt&order=desc
 
 # Sort by threat level (highest first)
 GET /api/v1/cryptids?sort=threatLevel&order=desc
 
 # Combined with filters
-GET /api/v1/cryptids?realm=1&sort=name&order=asc&page=1
 ```
 
 ---
@@ -258,13 +247,10 @@ GET /api/v1/cryptids/1?include=images,related
 **Public fields** (returned by default):
 - `id`, `name`, `aliases`, `description`, `originSummary`
 - `physicalDescription`, `behaviorNotes`, `classification`
-- `realm`, `habitat`, `manifestationConditions`
-- `firstReportedAt`, `lastReportedAt`, `timelineSummary`
-- `status`, `threatLevel`, `containmentNotes`
 - `images`, `relatedCryptids`
 
 **Private fields** (only returned when explicitly requested):
-- `createdAt`, `updatedAt`
+- `createdAt`
 
 > **Note**: Private fields are internal metadata that are not included in responses by default. You must explicitly request them using the `fields` parameter if needed.
 
@@ -278,10 +264,10 @@ GET /api/v1/cryptids/1?fields=id,name,description,status
 GET /api/v1/cryptids/1?fields=id,name
 
 # Request private timestamp fields explicitly
-GET /api/v1/cryptids/1?fields=id,name,createdAt,updatedAt
+GET /api/v1/cryptids/1?fields=id,name,createdAt
 
 # Private metadata only
-GET /api/v1/cryptids/1?fields=createdAt,updatedAt
+GET /api/v1/cryptids/1?fields=createdAt
 
 # Combining with include parameter
 GET /api/v1/cryptids/1?include=images&fields=id,name,images,status
@@ -356,27 +342,21 @@ Parameters are processed in this order:
 ### Combination Rules
 
 * **Within filter type** (multi-valued): **OR** semantics
-  - `habitat=1,2,3` → Habitat 1 OR 2 OR 3
 * **Between filter types**: **AND** semantics
-  - `realm=1&status=verified` → Realm 1 AND Status verified
 * **Search + Filters**: **AND** semantics
-  - `search=shadow&realm=1` → Contains "shadow" AND Realm 1
 
 ### Complex Example
 
 ```bash
-GET /api/v1/cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&sort=lastReportedAt&order=desc&page=2&limit=20
 ```
 
 **Interpretation**:
 
 1. Search for "shadow" in name, aliases, description, origin
 2. Filter:
-   - Realm 1 OR Realm 2
    - AND Classification 3
    - AND Status "reported" OR "verified"
    - AND Has images
-3. Sort by `lastReportedAt` descending
 4. Return page 2 with 20 items per page
 
 ---
@@ -442,10 +422,8 @@ GET /api/v1/cryptids?limit=50
 
 ```bash
 # By single criterion
-GET /api/v1/cryptids?realm=1
 
 # By multiple criteria
-GET /api/v1/cryptids?realm=1&status=verified&hasImages=true
 
 # Multi-valued filter
 GET /api/v1/cryptids?classification=1,2,3
@@ -458,7 +436,6 @@ GET /api/v1/cryptids?classification=1,2,3
 GET /api/v1/cryptids?search=watcher
 
 # Search with filters
-GET /api/v1/cryptids?search=cosmic&realm=1&hasImages=true
 
 # Search with pagination
 GET /api/v1/cryptids?search=shadow&page=1&limit=10
@@ -471,7 +448,6 @@ GET /api/v1/cryptids?search=shadow&page=1&limit=10
 GET /api/v1/cryptids?sort=name&order=asc
 
 # Most recent sightings
-GET /api/v1/cryptids?sort=lastReportedAt&order=desc
 
 # Highest threat first
 GET /api/v1/cryptids?sort=threatLevel&order=desc
@@ -509,7 +485,6 @@ GET /api/v1/cryptids/1?include=images,related,sources
 // TypeScript example for list endpoint
 interface CryptidListQueryParams {
   search?: string;
-  realm?: number | number[];
   classification?: number | number[];
   status?: string | string[];
   threatLevel?: string | string[];
@@ -532,7 +507,6 @@ function buildListQueryString(params: CryptidListQueryParams): string {
 
   // Add each parameter if defined
   if (params.search) urlParams.append('search', params.search);
-  if (params.realm) urlParams.append('realm', Array.isArray(params.realm) ? params.realm.join(',') : String(params.realm));
   if (params.classification) urlParams.append('classification', Array.isArray(params.classification) ? params.classification.join(',') : String(params.classification));
   if (params.status) urlParams.append('status', Array.isArray(params.status) ? params.status.join(',') : params.status);
   if (params.threatLevel) urlParams.append('threatLevel', Array.isArray(params.threatLevel) ? params.threatLevel.join(',') : params.threatLevel);
@@ -562,12 +536,10 @@ function buildDetailQueryString(params: CryptidDetailQueryParams): string {
 // Usage examples
 const listQuery = buildListQueryString({
   search: 'shadow',
-  realm: [1, 2],
   hasImages: true,
   page: 1,
   limit: 20
 });
-// Result: search=shadow&realm=1,2&hasImages=true&page=1&limit=20
 
 const detailQuery = buildDetailQueryString({
   include: ['images', 'related']
@@ -589,7 +561,6 @@ const detailQueryWithFields = buildDetailQueryString({
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- | ----------- |
 | **Pagination**    | `page`, `limit`                                                   | Control result pages             | ✅ Implemented |
 | **Search**        | `search`                                                          | Full-text search                 | ✅ Implemented |
-| **Filters**       | `habitat`, `realm`, `classification`, `status`, `threatLevel`, `hasImages` | Filter results | ✅ Implemented |
 | **Sorting**       | `sort`, `order`                                                   | Order results                    | ✅ Implemented |
 | **Relationships** | `include` (✅), `fields` (✅), `expand` (🚧)                      | Control included data & fields   | Partial     |
 
@@ -612,12 +583,10 @@ const detailQueryWithFields = buildDetailQueryString({
 # Full example with all parameter types
 GET /api/v1/cryptids?
   search=shadow&              # Full-text search
-  realm=1,2&                  # Multi-valued filter (OR)
   classification=3&           # Single filter
   status=reported,verified&   # Multi-valued filter (OR)
   hasImages=true&             # Boolean filter
   threatLevel=high,critical&  # Multi-valued filter (OR)
-  sort=lastReportedAt&        # Sort field
   order=desc&                 # Sort order
   page=2&                     # Page number
   limit=20                    # Page size
@@ -625,7 +594,6 @@ GET /api/v1/cryptids?
 
 This produces results that are:
 1. Searched for "shadow"
-2. Filtered by realm 1 OR 2
 3. AND classification 3
 4. AND status reported OR verified
 5. AND have images

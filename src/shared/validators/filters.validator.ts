@@ -24,10 +24,7 @@ export const orderableFields = [
   'name',
   'status',
   'threatLevel',
-  'firstReportedAt',
-  'lastReportedAt',
   'createdAt',
-  'updatedAt',
 ] as const
 
 export type OrderableField = (typeof orderableFields)[number]
@@ -66,8 +63,6 @@ export function extractAppliedFilters(params: Record<string, any>): AppliedFilte
 
   const filterFields = [
     'search',
-    'habitat',
-    'realm',
     'classification',
     'status',
     'threatLevel',

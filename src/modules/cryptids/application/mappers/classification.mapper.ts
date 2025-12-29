@@ -7,7 +7,7 @@ export interface MapperOptions {
 }
 
 export class ClassificationMapper {
-  static toDTO(classification: Classification, options?: MapperOptions): Partial<ClassificationDTO> & { createdAt?: string; updatedAt?: string } {
+  static toDTO(classification: Classification, options?: MapperOptions): Partial<ClassificationDTO> & { createdAt?: string } {
     const baseDTO: ClassificationDTO = {
       id: classification.id,
       name: classification.name,
@@ -18,7 +18,6 @@ export class ClassificationMapper {
     const fullDTO = {
       ...baseDTO,
       createdAt: classification.createdAt.toISOString(),
-      updatedAt: classification.updatedAt.toISOString(),
     }
 
     if (options?.fields && options.fields.length > 0) {
@@ -28,7 +27,7 @@ export class ClassificationMapper {
     return baseDTO
   }
 
-  static toDTOList(classifications: Classification[], options?: MapperOptions): (Partial<ClassificationDTO> & { createdAt?: string; updatedAt?: string })[] {
+  static toDTOList(classifications: Classification[], options?: MapperOptions): (Partial<ClassificationDTO> & { createdAt?: string })[] {
     return classifications.map(c => this.toDTO(c, options))
   }
 }

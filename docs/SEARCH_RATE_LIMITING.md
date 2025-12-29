@@ -9,7 +9,6 @@ This document describes the **Search-specific Rate Limiting**, a separate and ex
 The search endpoint (`/cryptids/search` or `/cryptids?search=`) executes higher computational cost operations:
 
 * **Full-text search** across multiple fields (name, aliases, description, origin)
-* **Compound filter combinations** (search + classification + realm + etc.)
 * **Ranking and relevance** of results
 * **Potentially costly deep pagination**
 

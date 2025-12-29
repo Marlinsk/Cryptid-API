@@ -5,7 +5,6 @@ export const imageSchema = z.object({
   url: z.string(),
   altText: z.string(),
   source: z.string(),
-  license: z.string(),
 })
 
 export type ImageDTO = z.infer<typeof imageSchema>

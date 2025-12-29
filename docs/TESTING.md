@@ -40,10 +40,8 @@ Integration Tests (require database):
 - Required and optional fields
 - Validation rules (danger levels, sighting years)
 - Factory methods for test data
-- Classification and realm support
 
 ### 2. Filter Tests ✅
-- Single-value filters (classification, realm, verification)
 - Multivalued filters with OR semantics
 - Range filters (danger level, sighting years)
 - Combined filters with AND semantics across different filter types

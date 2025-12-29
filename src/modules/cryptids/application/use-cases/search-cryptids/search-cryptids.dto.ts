@@ -8,7 +8,6 @@ export const searchCryptidsSchema = z.object({
     .max(100, 'Search query cannot exceed 100 characters')
     .trim(),
   classification: z.coerce.number().int().positive().optional(),
-  realm: z.coerce.number().int().positive().optional(),
   page: paginationQuerySchema.shape.page,
   limit: paginationQuerySchema.shape.limit,
 })

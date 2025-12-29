@@ -152,18 +152,16 @@ GET /cryptids/search?query=shadow&page=1&limit=20
 
 | Parameter | Type   | Values                                                           |
 | --------- | ------ | ---------------------------------------------------------------- |
-| `sortBy`  | string | `id`, `name`, `status`, `threatLevel`, `createdAt`, `updatedAt` |
+| `sortBy`  | string | `id`, `name`, `status`, `threatLevel`, `createdAt` |
 | `order`   | string | `asc`, `desc`                                                    |
 
 ### Example
 
 ```bash
-GET /cryptids?sortBy=lastReportedAt&order=desc&page=1&limit=10
 ```
 
 **Flow**:
 1. Applies filters (if any)
-2. **Sorts** results by `lastReportedAt DESC`
 3. **Paginates** the sorted results
 
 ---
@@ -343,14 +341,11 @@ GET /cryptids?page=1&limit=10
       "name": "The Nameless Watcher",
       "aliases": ["Watcher in the Void"],
       "classification": "Cosmic Entity",
-      "realm": "Extradimensional",
-      "habitat": "Void",
       "status": "Reported",
       "threatLevel": "High",
       "sightingsCount": 12,
       "hasImages": true,
       "shortDescription": "A silent presence observed at the edge of reality.",
-      "lastReportedAt": "2019-03-15T00:00:00.000Z"
     }
     // ... 9 more items
   ],
@@ -369,7 +364,6 @@ GET /cryptids?page=1&limit=10
 
 **Request**:
 ```bash
-GET /cryptids?realm=1&threatLevel=High&page=2&limit=20
 ```
 
 **Response**:
@@ -379,7 +373,6 @@ GET /cryptids?realm=1&threatLevel=High&page=2&limit=20
   "pagination": {
     "page": 2,
     "limit": 20,
-    "totalItems": 45,  // Total cryptids with realm=1 AND threatLevel=High
     "totalPages": 3,
     "hasNext": true,
     "hasPrevious": true

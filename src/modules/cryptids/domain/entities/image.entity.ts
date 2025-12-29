@@ -5,7 +5,6 @@ interface ImageProps {
   url: string
   altText: string
   source: string
-  license: string
   createdAt: Date
 }
 
@@ -28,10 +27,6 @@ export class Image extends Entity<ImageProps> {
 
   get source(): string {
     return this.props.source
-  }
-
-  get license(): string {
-    return this.props.license
   }
 
   get createdAt(): Date {
