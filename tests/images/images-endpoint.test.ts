@@ -49,19 +49,23 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           {
             cryptidId: 1,
             url: 'https://example.com/image1.jpg',
+            size: '16:9',
             altText: 'Test image 1',
             source: 'Test source',
+            license: 'CC BY 4.0',
           },
-          1
+          '550e8400-e29b-41d4-a716-446655440001'
         ),
         Image.create(
           {
             cryptidId: 1,
             url: 'https://example.com/image2.jpg',
+            size: '9:16',
             altText: 'Test image 2',
             source: 'Test source 2',
+            license: 'CC BY-SA 4.0',
           },
-          2
+          '550e8400-e29b-41d4-a716-446655440002'
         ),
       ]
 
@@ -104,10 +108,12 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           {
             cryptidId: 1,
             url: 'https://example.com/image3.jpg',
+            size: '4:3',
             altText: 'Page 2 image',
             source: 'Test source',
+            license: 'Public Domain',
           },
-          3
+          '550e8400-e29b-41d4-a716-446655440003'
         ),
       ]
 
@@ -221,17 +227,21 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
         {
           cryptidId: 1,
           url: 'https://example.com/test.jpg',
+          size: '4:3',
           altText: 'Test alt text',
           source: 'Test source',
+          license: 'MIT',
         },
-        1
+        '550e8400-e29b-41d4-a716-446655440000'
       )
 
-      expect(image.id).toBe('1')
+      expect(image.id).toBe('550e8400-e29b-41d4-a716-446655440000')
       expect(image.cryptidId).toBe(1)
       expect(image.url).toBe('https://example.com/test.jpg')
+      expect(image.size).toBe('4:3')
       expect(image.altText).toBe('Test alt text')
       expect(image.source).toBe('Test source')
+      expect(image.license).toBe('MIT')
       expect(image.createdAt).toBeInstanceOf(Date)
     })
 
@@ -240,17 +250,21 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
         {
           cryptidId: 1,
           url: 'https://example.com/test.jpg',
+          size: '4:3',
           altText: 'Test alt',
           source: 'Source',
+          license: 'Apache 2.0',
         },
-        1
+        '550e8400-e29b-41d4-a716-446655440000'
       )
 
       // Verify getters work
       expect(image.cryptidId).toBe(1)
       expect(image.url).toBe('https://example.com/test.jpg')
+      expect(image.size).toBe('4:3')
       expect(image.altText).toBe('Test alt')
       expect(image.source).toBe('Source')
+      expect(image.license).toBe('Apache 2.0')
     })
   })
 })

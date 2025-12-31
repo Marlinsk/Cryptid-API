@@ -6,9 +6,6 @@ export interface ListImagesFilters {
 }
 
 export interface IImagesRepository {
-  findById(id: number): Promise<Image | null>
-  findByCryptidId(
-    filters: ListImagesFilters,
-    pagination: PaginationParams
-  ): Promise<PaginatedResult<Image>>
+  findById(id: string): Promise<Image | null>
+  findByCryptidId(filters: ListImagesFilters, pagination: PaginationParams): Promise<PaginatedResult<Image>>
 }
