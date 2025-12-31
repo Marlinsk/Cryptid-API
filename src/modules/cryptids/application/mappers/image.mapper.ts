@@ -6,8 +6,10 @@ export class ImageMapper {
     return {
       id: image.id,
       url: image.url,
+      size: image.size,
       altText: image.altText,
       source: image.source,
+      license: image.license,
     }
   }
 }
