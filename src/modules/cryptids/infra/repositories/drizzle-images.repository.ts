@@ -24,10 +24,6 @@ export class DrizzleImagesRepository implements IImagesRepository {
   ): Promise<PaginatedResult<Image>> {
     const conditions: any[] = [eq(images.cryptidId, filters.cryptidId)]
 
-    if (filters.license) {
-      conditions.push(eq(images.license, filters.license))
-    }
-
     const offset = (pagination.page - 1) * pagination.limit
 
     const [data, totalResult] = await Promise.all([
@@ -67,7 +63,6 @@ export class DrizzleImagesRepository implements IImagesRepository {
         url: data.url,
         altText: data.altText,
         source: data.source,
-        license: data.license,
       },
       data.id
     )

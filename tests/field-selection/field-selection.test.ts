@@ -133,12 +133,9 @@ describe('Field Selection', () => {
         description: 'A mysterious entity',
         originSummary: 'Unknown origin',
         classification: 'Cosmic',
-        realm: 'Extradimensional',
-        habitat: 'Void',
         status: 'reported',
         threatLevel: 'high',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T10:00:00Z',
       }
 
       const result = pickFields(cryptidData, ['id', 'name', 'status'])
@@ -157,18 +154,15 @@ describe('Field Selection', () => {
         name: 'Test',
         description: 'Test description',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       }
 
-      const result = pickFields(cryptidData, ['id', 'createdAt', 'updatedAt'])
+      const result = pickFields(cryptidData, ['id', 'createdAt'])
 
       expect(result).toEqual({
         id: '1',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       })
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
       expect(result).not.toHaveProperty('name')
       expect(result).not.toHaveProperty('description')
     })
@@ -178,14 +172,12 @@ describe('Field Selection', () => {
         id: '1',
         name: 'Test',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       }
 
-      const result = pickFields(cryptidData, ['createdAt', 'updatedAt'])
+      const result = pickFields(cryptidData, ['createdAt'])
 
       expect(result).toEqual({
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       })
       expect(result).not.toHaveProperty('id')
       expect(result).not.toHaveProperty('name')
@@ -197,18 +189,14 @@ describe('Field Selection', () => {
         name: 'Test',
         physicalDescription: null,
         behaviorNotes: null,
-        firstReportedAt: null,
       }
 
-      const result = pickFields(cryptidData, ['id', 'physicalDescription', 'firstReportedAt'])
 
       expect(result).toEqual({
         id: '1',
         physicalDescription: null,
-        firstReportedAt: null,
       })
       expect(result.physicalDescription).toBeNull()
-      expect(result.firstReportedAt).toBeNull()
     })
 
     it('should handle array fields', () => {
@@ -239,19 +227,13 @@ describe('Field Selection', () => {
         'physicalDescription',
         'behaviorNotes',
         'classification',
-        'realm',
-        'habitat',
+        ,
         'manifestationConditions',
-        'firstReportedAt',
-        'lastReportedAt',
-        'timelineSummary',
         'status',
         'threatLevel',
-        'containmentNotes',
         'images',
         'relatedCryptids',
         'createdAt',
-        'updatedAt',
       ]
 
       expect(ALLOWED_DETAIL_FIELDS).toHaveLength(expectedFields.length)
@@ -261,13 +243,12 @@ describe('Field Selection', () => {
     })
 
     it('should have consistent field count', () => {
-      // Ensure we have 21 fields total
-      expect(ALLOWED_DETAIL_FIELDS).toHaveLength(21)
+      // Ensure we have 20 fields total
+      expect(ALLOWED_DETAIL_FIELDS).toHaveLength(20)
     })
 
-    it('should mark createdAt and updatedAt as private fields', () => {
+    it('should mark createdAt as private field', () => {
       expect(ALLOWED_DETAIL_FIELDS).toContain('createdAt')
-      expect(ALLOWED_DETAIL_FIELDS).toContain('updatedAt')
     })
   })
 
@@ -279,14 +260,12 @@ describe('Field Selection', () => {
         description: 'Description',
         status: 'reported',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       }
 
       const publicFields = ['id', 'name', 'description', 'status']
       const result = pickFields(fullObject, publicFields)
 
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('name')
     })
@@ -296,13 +275,11 @@ describe('Field Selection', () => {
         id: '1',
         name: 'Test',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       }
 
-      const result = pickFields(fullObject, ['id', 'name', 'createdAt', 'updatedAt'])
+      const result = pickFields(fullObject, ['id', 'name', 'createdAt'])
 
       expect(result).toHaveProperty('createdAt', '2025-01-12T10:00:00Z')
-      expect(result).toHaveProperty('updatedAt', '2025-01-12T11:00:00Z')
     })
 
     it('should allow requesting only private fields', () => {
@@ -311,15 +288,13 @@ describe('Field Selection', () => {
         name: 'Test',
         description: 'Description',
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       }
 
-      const result = pickFields(fullObject, ['createdAt', 'updatedAt'])
+      const result = pickFields(fullObject, ['createdAt'])
 
-      expect(Object.keys(result)).toHaveLength(2)
+      expect(Object.keys(result)).toHaveLength(1)
       expect(result).toEqual({
         createdAt: '2025-01-12T10:00:00Z',
-        updatedAt: '2025-01-12T11:00:00Z',
       })
     })
   })

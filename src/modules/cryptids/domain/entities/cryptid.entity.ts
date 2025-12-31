@@ -9,17 +9,10 @@ interface CryptidProps {
   physicalDescription: string | null
   behaviorNotes: string | null
   manifestationConditions: string | null
-  timelineSummary: string | null
-  containmentNotes: string | null
   classificationId: number
-  realmId: number
-  habitatId: number
   status: string
   threatLevel: string
-  firstReportedAt: Date | null
-  lastReportedAt: Date | null
   createdAt: Date
-  updatedAt: Date
 }
 
 export class Cryptid extends AggregateRoot<CryptidProps> {
@@ -55,24 +48,8 @@ export class Cryptid extends AggregateRoot<CryptidProps> {
     return this.props.manifestationConditions
   }
 
-  get timelineSummary(): string | null {
-    return this.props.timelineSummary
-  }
-
-  get containmentNotes(): string | null {
-    return this.props.containmentNotes
-  }
-
   get classificationId(): number {
     return this.props.classificationId
-  }
-
-  get realmId(): number {
-    return this.props.realmId
-  }
-
-  get habitatId(): number {
-    return this.props.habitatId
   }
 
   get status(): string {
@@ -87,28 +64,15 @@ export class Cryptid extends AggregateRoot<CryptidProps> {
     return this.props.originSummary
   }
 
-  get firstReportedAt(): Date | null {
-    return this.props.firstReportedAt
-  }
-
-  get lastReportedAt(): Date | null {
-    return this.props.lastReportedAt
-  }
-
   get createdAt(): Date {
     return this.props.createdAt
   }
 
-  get updatedAt(): Date {
-    return this.props.updatedAt
-  }
-
-  public static create(props: Omit<CryptidProps, 'createdAt' | 'updatedAt'>, id: number): Cryptid {
+  public static create(props: Omit<CryptidProps, 'createdAt'>, id: number): Cryptid {
     const cryptid = new Cryptid(
       {
         ...props,
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
       id
     )

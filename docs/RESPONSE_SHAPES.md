@@ -26,28 +26,23 @@ No endpoint mixes both by default.
   "name": "string",
   "aliases": ["string"],
   "classification": "string",
-  "realm": "string",
-  "habitat": "string",
   "status": "string",
   "threatLevel": "string",
   "sightingsCount": 0,
   "hasImages": false,
   "shortDescription": "string",
-  "lastReportedAt": "ISO 8601 string | null"
 }
 ```
 
 **Query Parameters**:
 - `page`: page number (default: 1)
 - `limit`: items per page (default: 10, max: 100)
-- `habitat`: filter by habitat ID
-- `realm`: filter by realm ID
 - `classification`: filter by classification ID
 - `status`: filter by status
 - `threatLevel`: filter by threat level
 - `hasImages`: filter by presence of images (boolean)
 - `hasSightings`: filter by presence of sightings (boolean)
-- `sortBy`: field for sorting (`id`, `name`, `status`, `threatLevel`, `createdAt`, `updatedAt`)
+- `sortBy`: field for sorting (`id`, `name`, `status`, `threatLevel`, `createdAt`)
 - `order`: order (`asc` or `desc`)
 
 **Response**:
@@ -76,7 +71,6 @@ No endpoint mixes both by default.
 - `page`: page number (default: 1)
 - `limit`: items per page (default: 10, max: 100)
 - `classification`: filter by classification ID
-- `realm`: filter by realm ID
 
 Searches in fields: `name`, `description`, `originSummary`
 
@@ -99,15 +93,9 @@ Searches in fields: `name`, `description`, `originSummary`
   "physicalDescription": "string | null",
   "behaviorNotes": "string | null",
   "classification": "string",
-  "realm": "string",
-  "habitat": "string",
   "manifestationConditions": "string | null",
-  "firstReportedAt": "ISO 8601 string | null",
-  "lastReportedAt": "ISO 8601 string | null",
-  "timelineSummary": "string | null",
   "status": "string",
   "threatLevel": "string",
-  "containmentNotes": "string | null",
   "images": [/* array of ImageDTO */] (optional),
   "relatedCryptids": [/* array of CryptidSummaryDTO */] (optional)
 }
@@ -117,11 +105,9 @@ Searches in fields: `name`, `description`, `originSummary`
 ```json
 {
   "createdAt": "ISO 8601 string",
-  "updatedAt": "ISO 8601 string"
 }
 ```
 
-> **Note**: `createdAt` and `updatedAt` are private fields that are NOT included in responses by default. They must be explicitly requested using the `fields` parameter.
 
 **Query Parameters** (inclusion and field control):
 
@@ -135,9 +121,9 @@ Searches in fields: `name`, `description`, `originSummary`
   - Allows sparse fieldsets to reduce bandwidth
   - Only returns requested fields
   - Invalid fields are filtered out automatically
-  - **Private fields** (`createdAt`, `updatedAt`) must be explicitly requested
+  - **Private fields** (`createdAt`) must be explicitly requested
   - Example: `?fields=id,name,description,status`
-  - Example with private fields: `?fields=id,name,createdAt,updatedAt`
+  - Example with private fields: `?fields=id,name,createdAt`
   - Can be combined with `include`: `?include=images&fields=id,name,images,status`
 
 - `expand`: 🚧 **Planned** - controls depth of nested resources
@@ -157,7 +143,6 @@ Searches in fields: `name`, `description`, `originSummary`
   "url": "string",
   "altText": "string",
   "source": "string",
-  "license": "string"
 }
 ```
 
@@ -221,7 +206,6 @@ Location: `src/modules/cryptids/infra/repositories/drizzle-cryptids.repository.t
 
 ### List all cryptids (Summary)
 ```bash
-GET /cryptids?page=1&limit=10&realm=1&threatLevel=High
 ```
 
 ### Search cryptids (Summary)
@@ -266,13 +250,11 @@ GET /cryptids/1?fields=id,name,shortDescription,status,threatLevel
 ```bash
 # Default response - NO timestamps
 GET /cryptids/1
-# Returns: all fields EXCEPT createdAt and updatedAt
 
 # Explicitly request timestamps
-GET /cryptids/1?fields=id,name,status,createdAt,updatedAt
-# Returns: only id, name, status, createdAt, updatedAt
+GET /cryptids/1?fields=id,name,status,createdAt
+# Returns: only id, name, status, createdAt
 
 # Only timestamps (for audit purposes)
-GET /cryptids/1?fields=createdAt,updatedAt
-# Returns: only createdAt and updatedAt
+GET /cryptids/1?fields=createdAt
 ```

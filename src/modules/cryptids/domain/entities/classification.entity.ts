@@ -5,7 +5,6 @@ interface ClassificationProps {
   description: string
   categoryType: 'physical' | 'narrative' | 'abstract'
   createdAt: Date
-  updatedAt: Date
 }
 
 export class Classification extends Entity<ClassificationProps> {
@@ -29,19 +28,14 @@ export class Classification extends Entity<ClassificationProps> {
     return this.props.createdAt
   }
 
-  get updatedAt(): Date {
-    return this.props.updatedAt
-  }
-
   public static create(
-    props: Omit<ClassificationProps, 'createdAt' | 'updatedAt'>,
+    props: Omit<ClassificationProps, 'createdAt'>,
     id: number
   ): Classification {
     const classification = new Classification(
       {
         ...props,
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
       id
     )

@@ -16,7 +16,6 @@ This document provides comprehensive information about the Images endpoints in t
 
 ## Overview
 
-The Images API allows you to retrieve images associated with specific cryptids. All image endpoints return paginated results with metadata about each image, including URL, alt text, source, and license information.
 
 **Base URL**: `/api/v1/cryptids/:id/images`
 
@@ -57,14 +56,12 @@ GET /api/v1/cryptids/:id/images
       "url": "https://example.com/images/cryptid-1.jpg",
       "altText": "A mysterious creature in the forest",
       "source": "Wildlife Photography Archive",
-      "license": "CC BY 4.0"
     },
     {
       "id": "2",
       "url": "https://example.com/images/cryptid-2.jpg",
       "altText": "Close-up of creature footprint",
       "source": "Cryptozoology Research Institute",
-      "license": "CC BY-SA 4.0"
     }
   ],
   "meta": {
@@ -120,7 +117,6 @@ When a cryptid has no images, the API returns an empty data array:
 | `url`     | string | Direct URL to the image file                     |
 | `altText` | string | Alternative text description for accessibility   |
 | `source`  | string | Source or attribution of the image               |
-| `license` | string | License type (e.g., CC BY 4.0, CC BY-SA 4.0)    |
 
 ##### Pagination Metadata
 
@@ -178,7 +174,6 @@ GET /api/v1/cryptids/1/images
       "url": "https://cdn.example.com/bigfoot-1.jpg",
       "altText": "Bigfoot sighting in Pacific Northwest forest",
       "source": "National Cryptid Database",
-      "license": "CC BY 4.0"
     }
   ],
   "meta": {
@@ -269,7 +264,6 @@ interface Image {
   url: string
   altText: string
   source: string
-  license: string
 }
 
 async function getCryptidImages(cryptidId: number, page = 1, limit = 10): Promise<Image[]> {
@@ -334,7 +328,6 @@ curl -X GET "https://api.example.com/api/v1/cryptids/1/images" | jq .
 
 ### Image Usage
 
-1. **Respect licenses**: Always check the `license` field and comply with license terms.
 2. **Provide attribution**: Use the `source` field to properly attribute images.
 3. **Accessibility**: Use the `altText` field for screen readers and alt attributes.
 

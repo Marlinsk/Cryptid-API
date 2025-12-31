@@ -59,7 +59,7 @@ GET /api/v1/cryptids/classifications?sort=categoryType&order=asc
 
 # Field selection examples
 GET /api/v1/cryptids/classifications?fields=id,name
-GET /api/v1/cryptids/classifications?fields=id,name,createdAt,updatedAt
+GET /api/v1/cryptids/classifications?fields=id,name,createdAt
 
 # Combined parameters
 GET /api/v1/cryptids/classifications?categoryType=physical&page=1&limit=5&sort=name&fields=id,name,description
@@ -100,9 +100,8 @@ GET /api/v1/cryptids/classifications?categoryType=physical&page=1&limit=5&sort=n
 }
 ```
 
-**Note**: By default, `createdAt` and `updatedAt` fields are **not** included in the response. To include them, use the `fields` parameter.
 
-**Response with fields parameter** (e.g., `?fields=id,name,createdAt,updatedAt`):
+**Response with fields parameter** (e.g., `?fields=id,name,createdAt`):
 
 ```json
 {
@@ -111,13 +110,11 @@ GET /api/v1/cryptids/classifications?categoryType=physical&page=1&limit=5&sort=n
       "id": "1",
       "name": "Humanoid",
       "createdAt": "2025-01-15T10:00:00.000Z",
-      "updatedAt": "2025-01-15T10:00:00.000Z"
     },
     {
       "id": "2",
       "name": "Beast",
       "createdAt": "2025-01-15T10:00:00.000Z",
-      "updatedAt": "2025-01-15T10:00:00.000Z"
     }
   ],
   "pagination": {
@@ -151,7 +148,6 @@ GET /api/v1/cryptids/classifications?categoryType=physical&page=1&limit=5&sort=n
 | Field          | Type   | Description                                         |
 |---------------|--------|-----------------------------------------------------|
 | `createdAt`   | string | ISO 8601 timestamp when created                     |
-| `updatedAt`   | string | ISO 8601 timestamp when last updated                |
 
 ##### Pagination Metadata
 
@@ -170,7 +166,7 @@ GET /api/v1/cryptids/classifications?categoryType=physical&page=1&limit=5&sort=n
 
 The `fields` parameter allows you to control which fields are returned in the response. This is useful for:
 - Reducing payload size by requesting only needed fields
-- Accessing private fields (`createdAt`, `updatedAt`) when needed
+- Accessing private fields (`createdAt`) when needed
 - Optimizing bandwidth for mobile or low-bandwidth connections
 
 ### Usage
@@ -180,10 +176,10 @@ The `fields` parameter allows you to control which fields are returned in the re
 GET /api/v1/cryptids/classifications?fields=id,name
 
 # Get specific fields including private ones
-GET /api/v1/cryptids/classifications?fields=id,name,description,createdAt,updatedAt
+GET /api/v1/cryptids/classifications?fields=id,name,description,createdAt
 
 # Get only private fields
-GET /api/v1/cryptids/classifications?fields=createdAt,updatedAt
+GET /api/v1/cryptids/classifications?fields=createdAt
 ```
 
 ### Examples
@@ -212,7 +208,7 @@ GET /api/v1/cryptids/classifications?fields=id,name
 
 **Request with private fields:**
 ```bash
-GET /api/v1/cryptids/classifications?fields=id,name,createdAt,updatedAt
+GET /api/v1/cryptids/classifications?fields=id,name,createdAt
 ```
 
 **Response:**
@@ -223,7 +219,6 @@ GET /api/v1/cryptids/classifications?fields=id,name,createdAt,updatedAt
       "id": "1",
       "name": "Humanoid",
       "createdAt": "2025-01-15T10:00:00.000Z",
-      "updatedAt": "2025-01-15T10:00:00.000Z"
     }
   ],
   "pagination": { ... }
@@ -233,7 +228,7 @@ GET /api/v1/cryptids/classifications?fields=id,name,createdAt,updatedAt
 ### Available Fields
 
 - **Public fields** (returned by default): `id`, `name`, `description`, `categoryType`
-- **Private fields** (only returned when explicitly requested): `createdAt`, `updatedAt`
+- **Private fields** (only returned when explicitly requested): `createdAt`
 
 ### Notes
 
@@ -373,7 +368,6 @@ GET /api/v1/cryptids?classification=1
 GET /api/v1/cryptids?classification=1,2,3
 
 # Combine classification filter with other filters
-GET /api/v1/cryptids?classification=1&realm=2&hasImages=true
 ```
 
 See [PARAMETERS.md](./PARAMETERS.md) for complete parameter documentation.
@@ -393,7 +387,6 @@ See [PARAMETERS.md](./PARAMETERS.md) for complete parameter documentation.
       "description": "Entities that exhibit primarily human-like physical characteristics...",
       "categoryType": "physical",
       "createdAt": "2025-01-15T10:00:00.000Z",
-      "updatedAt": "2025-01-15T10:00:00.000Z"
     }
   ],
   "meta": {
@@ -550,7 +543,6 @@ interface Classification {
   description: string;
   categoryType: 'physical' | 'narrative' | 'abstract';
   createdAt: string;
-  updatedAt: string;
 }
 
 // Query parameter type
@@ -656,6 +648,5 @@ GET /api/v1/cryptids?classification={id1},{id2},{id3}  # Multiple (OR)
 - **Filters**: `categoryType` (optional)
 - **Sorting**: `sort` and `order` parameters (default: sort by `id` ascending)
 - **Field Selection**: `fields` parameter for custom field selection
-- **Private Fields**: `createdAt` and `updatedAt` only returned when explicitly requested
 - **Rate Limit**: Standard API limits apply
 - **Response Format**: JSON with `data`, `pagination`, and `meta` fields

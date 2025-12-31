@@ -1,5 +1,3 @@
 export * from './classifications.schema'
 export * from './cryptids.schema'
-export * from './habitats.schema'
 export * from './images.schema'
-export * from './realms.schema'

@@ -51,7 +51,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             url: 'https://example.com/image1.jpg',
             altText: 'Test image 1',
             source: 'Test source',
-            license: 'CC BY 4.0',
           },
           1
         ),
@@ -61,7 +60,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             url: 'https://example.com/image2.jpg',
             altText: 'Test image 2',
             source: 'Test source 2',
-            license: 'CC BY-SA 4.0',
           },
           2
         ),
@@ -108,7 +106,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             url: 'https://example.com/image3.jpg',
             altText: 'Page 2 image',
             source: 'Test source',
-            license: 'CC BY 4.0',
           },
           3
         ),
@@ -226,7 +223,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           url: 'https://example.com/test.jpg',
           altText: 'Test alt text',
           source: 'Test source',
-          license: 'CC BY 4.0',
         },
         1
       )
@@ -236,7 +232,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
       expect(image.url).toBe('https://example.com/test.jpg')
       expect(image.altText).toBe('Test alt text')
       expect(image.source).toBe('Test source')
-      expect(image.license).toBe('CC BY 4.0')
       expect(image.createdAt).toBeInstanceOf(Date)
     })
 
@@ -247,7 +242,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           url: 'https://example.com/test.jpg',
           altText: 'Test alt',
           source: 'Source',
-          license: 'CC0',
         },
         1
       )
@@ -257,7 +251,6 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
       expect(image.url).toBe('https://example.com/test.jpg')
       expect(image.altText).toBe('Test alt')
       expect(image.source).toBe('Source')
-      expect(image.license).toBe('CC0')
     })
   })
 })

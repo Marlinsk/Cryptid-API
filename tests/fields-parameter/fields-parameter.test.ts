@@ -16,18 +16,11 @@ describe('Fields Parameter - Cryptid Mapper', () => {
       physicalDescription: 'Physical desc',
       behaviorNotes: 'Behavior notes',
       manifestationConditions: ['Condition 1'],
-      firstReportedAt: new Date('2024-01-01'),
-      lastReportedAt: new Date('2024-12-01'),
-      timelineSummary: 'Timeline',
       status: 'active',
       threatLevel: 'high',
-      containmentNotes: 'Containment',
       createdAt: new Date('2024-01-01T10:00:00Z'),
-      updatedAt: new Date('2024-01-02T10:00:00Z'),
     } as unknown as Cryptid,
     classification: 'Terrestrial',
-    realm: 'Physical',
-    habitat: 'Forest',
     hasImages: true,
   }
 
@@ -40,17 +33,14 @@ describe('Fields Parameter - Cryptid Mapper', () => {
       expect(result).toHaveProperty('name')
       expect(result).toHaveProperty('aliases')
       expect(result).toHaveProperty('classification')
-      expect(result).toHaveProperty('realm')
-      expect(result).toHaveProperty('habitat')
+      expect(result).toHaveProperty()
       expect(result).toHaveProperty('status')
       expect(result).toHaveProperty('threatLevel')
       expect(result).toHaveProperty('hasImages')
       expect(result).toHaveProperty('shortDescription')
-      expect(result).toHaveProperty('lastReportedAt')
 
       // Should NOT have private fields by default
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
 
     it('should have correct values for public fields', () => {
@@ -60,8 +50,6 @@ describe('Fields Parameter - Cryptid Mapper', () => {
       expect(result.name).toBe('Test Cryptid')
       expect(result.aliases).toEqual(['Alias1', 'Alias2'])
       expect(result.classification).toBe('Terrestrial')
-      expect(result.realm).toBe('Physical')
-      expect(result.habitat).toBe('Forest')
       expect(result.status).toBe('active')
       expect(result.threatLevel).toBe('high')
       expect(result.hasImages).toBe(true)
@@ -69,18 +57,16 @@ describe('Fields Parameter - Cryptid Mapper', () => {
   })
 
   describe('toSummary with fields parameter', () => {
-    it('should return only createdAt and updatedAt when requested', () => {
+    it('should return only createdAt when requested', () => {
       const result = CryptidMapper.toSummary(mockCryptidData, {
-        fields: ['createdAt', 'updatedAt'],
+        fields: ['createdAt'],
       })
 
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
       expect(typeof result.createdAt).toBe('string')
-      expect(typeof result.updatedAt).toBe('string')
 
       // Should only have the requested fields
-      expect(Object.keys(result)).toHaveLength(2)
+      expect(Object.keys(result)).toHaveLength(1)
       expect(result).not.toHaveProperty('id')
       expect(result).not.toHaveProperty('name')
     })
@@ -101,14 +87,13 @@ describe('Fields Parameter - Cryptid Mapper', () => {
 
     it('should return mix of public and private fields when requested', () => {
       const result = CryptidMapper.toSummary(mockCryptidData, {
-        fields: ['id', 'name', 'createdAt', 'updatedAt'],
+        fields: ['id', 'name', 'createdAt'],
       })
 
       expect(result).toHaveProperty('id', '1')
       expect(result).toHaveProperty('name', 'Test Cryptid')
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
-      expect(Object.keys(result)).toHaveLength(4)
+      expect(Object.keys(result)).toHaveLength(3)
     })
 
     it('should return only one field when requested', () => {
@@ -129,16 +114,14 @@ describe('Fields Parameter - Cryptid Mapper', () => {
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('name')
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
 
-    it('should format createdAt and updatedAt as ISO strings', () => {
+    it('should format createdAt as ISO string', () => {
       const result = CryptidMapper.toSummary(mockCryptidData, {
-        fields: ['id', 'createdAt', 'updatedAt'],
+        fields: ['id', 'createdAt'],
       })
 
       expect(result.createdAt).toBe('2024-01-01T10:00:00.000Z')
-      expect(result.updatedAt).toBe('2024-01-02T10:00:00.000Z')
       expect(result.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
     })
 
@@ -149,19 +132,16 @@ describe('Fields Parameter - Cryptid Mapper', () => {
           'name',
           'aliases',
           'classification',
-          'realm',
-          'habitat',
+          ,
           'status',
           'threatLevel',
           'hasImages',
           'shortDescription',
-          'lastReportedAt',
         ],
       })
 
       expect(Object.keys(result)).toHaveLength(11)
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
   })
 
@@ -173,20 +153,17 @@ describe('Fields Parameter - Cryptid Mapper', () => {
       expect(result).toHaveProperty('name')
       expect(result).toHaveProperty('description')
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
 
     it('should return private fields when requested', () => {
       const result = CryptidMapper.toDetail(mockCryptidData, {
-        fields: ['id', 'name', 'createdAt', 'updatedAt'],
+        fields: ['id', 'name', 'createdAt'],
       })
 
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('name')
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
       expect(result.createdAt).toBe('2024-01-01T10:00:00.000Z')
-      expect(result.updatedAt).toBe('2024-01-02T10:00:00.000Z')
     })
   })
 })
@@ -198,7 +175,6 @@ describe('Fields Parameter - Classification Mapper', () => {
     description: 'Test description',
     categoryType: 'physical',
     createdAt: new Date('2024-01-01T10:00:00Z'),
-    updatedAt: new Date('2024-01-02T10:00:00Z'),
   } as Classification
 
   describe('toDTO without fields parameter', () => {
@@ -211,7 +187,6 @@ describe('Fields Parameter - Classification Mapper', () => {
       expect(result).toHaveProperty('categoryType')
 
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
 
     it('should have correct values for public fields', () => {
@@ -225,16 +200,14 @@ describe('Fields Parameter - Classification Mapper', () => {
   })
 
   describe('toDTO with fields parameter', () => {
-    it('should return only createdAt and updatedAt when requested', () => {
+    it('should return only createdAt when requested', () => {
       const result = ClassificationMapper.toDTO(mockClassification, {
-        fields: ['createdAt', 'updatedAt'],
+        fields: ['createdAt'],
       })
 
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
       expect(typeof result.createdAt).toBe('string')
-      expect(typeof result.updatedAt).toBe('string')
-      expect(Object.keys(result)).toHaveLength(2)
+      expect(Object.keys(result)).toHaveLength(1)
     })
 
     it('should return specific public fields when requested', () => {
@@ -253,24 +226,22 @@ describe('Fields Parameter - Classification Mapper', () => {
 
     it('should return mix of public and private fields when requested', () => {
       const result = ClassificationMapper.toDTO(mockClassification, {
-        fields: ['id', 'name', 'description', 'createdAt', 'updatedAt'],
+        fields: ['id', 'name', 'description', 'createdAt'],
       })
 
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('name')
       expect(result).toHaveProperty('description')
       expect(result).toHaveProperty('createdAt')
-      expect(result).toHaveProperty('updatedAt')
-      expect(Object.keys(result)).toHaveLength(5)
+      expect(Object.keys(result)).toHaveLength(4)
     })
 
-    it('should format createdAt and updatedAt as ISO strings', () => {
+    it('should format createdAt as ISO string', () => {
       const result = ClassificationMapper.toDTO(mockClassification, {
-        fields: ['createdAt', 'updatedAt'],
+        fields: ['createdAt'],
       })
 
       expect(result.createdAt).toBe('2024-01-01T10:00:00.000Z')
-      expect(result.updatedAt).toBe('2024-01-02T10:00:00.000Z')
     })
 
     it('should handle empty fields array by returning all public fields', () => {
@@ -281,7 +252,6 @@ describe('Fields Parameter - Classification Mapper', () => {
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('name')
       expect(result).not.toHaveProperty('createdAt')
-      expect(result).not.toHaveProperty('updatedAt')
     })
   })
 
@@ -293,7 +263,6 @@ describe('Fields Parameter - Classification Mapper', () => {
         description: 'Description 1',
         categoryType: 'physical',
         createdAt: new Date('2024-01-01T10:00:00Z'),
-        updatedAt: new Date('2024-01-02T10:00:00Z'),
       } as Classification,
       {
         id: '2',
@@ -301,7 +270,6 @@ describe('Fields Parameter - Classification Mapper', () => {
         description: 'Description 2',
         categoryType: 'narrative',
         createdAt: new Date('2024-01-03T10:00:00Z'),
-        updatedAt: new Date('2024-01-04T10:00:00Z'),
       } as Classification,
     ]
 
@@ -315,7 +283,6 @@ describe('Fields Parameter - Classification Mapper', () => {
         expect(item).toHaveProperty('description')
         expect(item).toHaveProperty('categoryType')
         expect(item).not.toHaveProperty('createdAt')
-        expect(item).not.toHaveProperty('updatedAt')
       })
     })
 
@@ -335,14 +302,13 @@ describe('Fields Parameter - Classification Mapper', () => {
 
     it('should return all items with only private fields when requested', () => {
       const result = ClassificationMapper.toDTOList(mockClassifications, {
-        fields: ['createdAt', 'updatedAt'],
+        fields: ['createdAt'],
       })
 
       expect(result).toHaveLength(2)
       result.forEach(item => {
         expect(item).toHaveProperty('createdAt')
-        expect(item).toHaveProperty('updatedAt')
-        expect(Object.keys(item)).toHaveLength(2)
+        expect(Object.keys(item)).toHaveLength(1)
         expect(item).not.toHaveProperty('id')
         expect(item).not.toHaveProperty('name')
       })

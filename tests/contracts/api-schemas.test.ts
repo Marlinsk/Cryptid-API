@@ -13,14 +13,11 @@ describe('API Contract Tests - Schema Validation', () => {
         name: 'Bigfoot',
         aliases: ['Sasquatch', 'Yeti'],
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
         status: 'Unconfirmed',
         threatLevel: 'Low',
         sightingsCount: 42,
         hasImages: true,
         shortDescription: 'A large, hairy humanoid creature',
-        lastReportedAt: '2024-01-15T10:30:00Z',
       }
 
       const result = cryptidSummarySchema.safeParse(validData)
@@ -38,20 +35,16 @@ describe('API Contract Tests - Schema Validation', () => {
       expect(result.success).toBe(false)
     })
 
-    it('should accept null lastReportedAt', () => {
       const validData = {
         id: '123',
         name: 'Bigfoot',
         aliases: [],
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
         status: 'Unconfirmed',
         threatLevel: 'Low',
         sightingsCount: 0,
         hasImages: false,
         shortDescription: 'A large, hairy humanoid creature',
-        lastReportedAt: null,
       }
 
       const result = cryptidSummarySchema.safeParse(validData)
@@ -64,14 +57,11 @@ describe('API Contract Tests - Schema Validation', () => {
         name: 'Bigfoot',
         aliases: 'Sasquatch', // Should be array
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
         status: 'Unconfirmed',
         threatLevel: 'Low',
         sightingsCount: 42,
         hasImages: true,
         shortDescription: 'A large, hairy humanoid creature',
-        lastReportedAt: '2024-01-15T10:30:00Z',
       }
 
       const result = cryptidSummarySchema.safeParse(invalidData)
@@ -90,19 +80,12 @@ describe('API Contract Tests - Schema Validation', () => {
         physicalDescription: 'Tall and hairy',
         behaviorNotes: 'Avoids humans',
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
         manifestationConditions: 'Night time',
-        firstReportedAt: '1950-01-01T00:00:00Z',
-        lastReportedAt: '2024-01-15T10:30:00Z',
-        timelineSummary: 'Sighted over 70 years',
         status: 'Unconfirmed',
         threatLevel: 'Low',
-        containmentNotes: 'No containment needed',
         images: [],
         relatedCryptids: [],
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-15T10:30:00Z',
       }
 
       const result = cryptidDetailSchema.safeParse(validData)
@@ -117,14 +100,9 @@ describe('API Contract Tests - Schema Validation', () => {
         description: 'Detailed description',
         originSummary: 'First sighted in...',
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
-        firstReportedAt: null,
-        lastReportedAt: null,
         status: 'Unconfirmed',
         threatLevel: 'Low',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-15T10:30:00Z',
       }
 
       const result = cryptidDetailSchema.safeParse(validData)
@@ -139,14 +117,9 @@ describe('API Contract Tests - Schema Validation', () => {
         description: 'Detailed description',
         originSummary: 'First sighted in...',
         classification: 'Terrestrial',
-        realm: 'Physical',
-        habitat: 'Forest',
-        firstReportedAt: null,
-        lastReportedAt: null,
         status: 'Unconfirmed',
         threatLevel: 'Low',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-15T10:30:00Z',
         // Optional fields not provided
       }
 
@@ -170,8 +143,6 @@ describe('API Contract Tests - Schema Validation', () => {
 
     it('should validate query with single-value filters', () => {
       const validData = {
-        habitat: 1,
-        realm: 2,
         classification: 3,
         status: 'Confirmed',
         threatLevel: 'High',
@@ -185,8 +156,6 @@ describe('API Contract Tests - Schema Validation', () => {
 
     it('should validate query with multi-value filters', () => {
       const validData = {
-        habitat: '1,2,3',
-        realm: '1,2',
         classification: '2,3',
         status: 'Confirmed,Unconfirmed',
         threatLevel: 'High,Medium',
@@ -253,7 +222,6 @@ describe('API Contract Tests - Schema Validation', () => {
         url: 'https://example.com/image.jpg',
         altText: 'A photo of Bigfoot',
         source: 'Photographer Name',
-        license: 'CC BY 4.0',
       }
 
       const result = imageSchema.safeParse(validData)
@@ -264,7 +232,6 @@ describe('API Contract Tests - Schema Validation', () => {
       const invalidData = {
         id: '1',
         url: 'https://example.com/image.jpg',
-        // Missing altText, source, license
       }
 
       const result = imageSchema.safeParse(invalidData)
@@ -299,7 +266,6 @@ describe('API Contract Tests - Schema Validation', () => {
       const validData = {
         query: 'creature',
         classification: 1,
-        realm: 2,
         page: 1,
         limit: 20,
       }

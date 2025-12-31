@@ -7,7 +7,6 @@ export const classifications = pgTable('classifications', {
   description: text('description').notNull(),
   categoryType: varchar('category_type', { length: 50 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
 export const selectClassificationSchema = createSelectSchema(classifications)

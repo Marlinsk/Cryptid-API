@@ -7,7 +7,7 @@ import type { CryptidSummaryDTO } from '../../dtos'
 import { CryptidMapper } from '../../mappers'
 import type { ListCryptidsDTO } from './list-cryptids.dto'
 
-type Response = Either<AppError, PaginatedResult<Partial<CryptidSummaryDTO> & { createdAt?: string; updatedAt?: string }>>
+type Response = Either<AppError, PaginatedResult<Partial<CryptidSummaryDTO> & { createdAt?: string }>>
 
 @injectable()
 export class ListCryptidsUseCase {
@@ -20,7 +20,7 @@ export class ListCryptidsUseCase {
     try {
       const filters: ListCryptidsFilters = {
         habitat: dto.habitat,
-        realm: dto.realm,
+        
         classification: dto.classification,
         status: dto.status,
         threatLevel: dto.threatLevel,

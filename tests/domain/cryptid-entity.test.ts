@@ -9,8 +9,6 @@ describe('Domain: Cryptid Entity', () => {
       expect(cryptid).toHaveProperty('id')
       expect(cryptid).toHaveProperty('name')
       expect(cryptid).toHaveProperty('classification')
-      expect(cryptid).toHaveProperty('realm')
-      expect(cryptid).toHaveProperty('habitat')
       expect(cryptid).toHaveProperty('status')
       expect(cryptid).toHaveProperty('threatLevel')
       expect(cryptid).toHaveProperty('origin')
@@ -23,9 +21,7 @@ describe('Domain: Cryptid Entity', () => {
       const cryptid = TestFactory.createCryptid()
 
       expect(cryptid).toHaveProperty('createdAt')
-      expect(cryptid).toHaveProperty('updatedAt')
       expect(cryptid.createdAt).toBeInstanceOf(Date)
-      expect(cryptid.updatedAt).toBeInstanceOf(Date)
     })
 
     it('should have optional sighting years', () => {
@@ -104,10 +100,8 @@ describe('Domain: Cryptid Entity', () => {
       expect(cryptid.classification).toBe('aquatic')
     })
 
-    it('should create cryptid with specific realm', () => {
-      const cryptid = TestFactory.createCryptidWithRealm('spectral')
+      const cryptid = TestFactory.createCryptidWith('spectral')
 
-      expect(cryptid.realm).toBe('spectral')
     })
 
     it('should create multiple cryptids', () => {
@@ -135,20 +129,14 @@ describe('Domain: Cryptid Entity', () => {
     })
   })
 
-  describe('Realm Values', () => {
-    it('should support physical realm', () => {
-      const cryptid = TestFactory.createCryptidWithRealm('physical')
-      expect(cryptid.realm).toBe('physical')
+  describe(' Values', () => {
+      const cryptid = TestFactory.createCryptidWith('physical')
     })
 
-    it('should support ethereal realm', () => {
-      const cryptid = TestFactory.createCryptidWithRealm('ethereal')
-      expect(cryptid.realm).toBe('ethereal')
+      const cryptid = TestFactory.createCryptidWith('ethereal')
     })
 
-    it('should support spectral realm', () => {
-      const cryptid = TestFactory.createCryptidWithRealm('spectral')
-      expect(cryptid.realm).toBe('spectral')
+      const cryptid = TestFactory.createCryptidWith('spectral')
     })
   })
 })
