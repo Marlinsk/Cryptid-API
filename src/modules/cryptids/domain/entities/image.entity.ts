@@ -9,8 +9,8 @@ interface ImageProps {
 }
 
 export class Image extends Entity<ImageProps> {
-  private constructor(props: ImageProps, id: number) {
-    super(props, id.toString())
+  private constructor(props: ImageProps, id: string) {
+    super(props, id)
   }
 
   get cryptidId(): number {
@@ -33,7 +33,7 @@ export class Image extends Entity<ImageProps> {
     return this.props.createdAt
   }
 
-  public static create(props: Omit<ImageProps, 'createdAt'>, id: number): Image {
+  public static create(props: Omit<ImageProps, 'createdAt'>, id: string): Image {
     const image = new Image(
       {
         ...props,

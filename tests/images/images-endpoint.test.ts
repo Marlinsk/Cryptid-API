@@ -52,7 +52,7 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             altText: 'Test image 1',
             source: 'Test source',
           },
-          1
+          '550e8400-e29b-41d4-a716-446655440001'
         ),
         Image.create(
           {
@@ -61,7 +61,7 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             altText: 'Test image 2',
             source: 'Test source 2',
           },
-          2
+          '550e8400-e29b-41d4-a716-446655440002'
         ),
       ]
 
@@ -107,7 +107,7 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
             altText: 'Page 2 image',
             source: 'Test source',
           },
-          3
+          '550e8400-e29b-41d4-a716-446655440003'
         ),
       ]
 
@@ -224,10 +224,10 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           altText: 'Test alt text',
           source: 'Test source',
         },
-        1
+        '550e8400-e29b-41d4-a716-446655440000'
       )
 
-      expect(image.id).toBe('1')
+      expect(image.id).toBe('550e8400-e29b-41d4-a716-446655440000')
       expect(image.cryptidId).toBe(1)
       expect(image.url).toBe('https://example.com/test.jpg')
       expect(image.altText).toBe('Test alt text')
@@ -243,7 +243,7 @@ describe('GET /api/v1/cryptids/:id/images - Images Endpoint', () => {
           altText: 'Test alt',
           source: 'Source',
         },
-        1
+        '550e8400-e29b-41d4-a716-446655440000'
       )
 
       // Verify getters work

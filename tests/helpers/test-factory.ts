@@ -55,8 +55,6 @@ export class TestFactory {
     return TestFactory.createCryptid({ classification })
   }
 
-  }
-
   static createVerifiedCryptid(): TestCryptid {
     return TestFactory.createCryptid({ isVerified: true })
   }

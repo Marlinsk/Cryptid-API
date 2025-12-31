@@ -8,7 +8,7 @@ import type { IImagesRepository, ListImagesFilters } from '../../domain/reposito
 
 @injectable()
 export class DrizzleImagesRepository implements IImagesRepository {
-  async findById(id: number): Promise<Image | null> {
+  async findById(id: string): Promise<Image | null> {
     const result = await db.select().from(images).where(eq(images.id, id)).limit(1)
 
     if (!result[0]) {
