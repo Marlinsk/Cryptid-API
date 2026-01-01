@@ -4,14 +4,13 @@ import type { FastifyBaseLogger } from 'fastify'
 import postgres from 'postgres'
 import * as schema from './schemas'
 
-const connectionString = `postgresql://${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`
-
-const client = postgres(connectionString, {
+const client = postgres(env.DATABASE_URL, {
   prepare: false,
   onnotice: () => {},
   connection: {
     application_name: 'cryptid-api',
   },
+  connect_timeout: 10,
 })
 
 export const db = drizzle(client, { schema })
