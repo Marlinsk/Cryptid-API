@@ -12,6 +12,8 @@ const client = postgres(connectionString, {
   connection: {
     application_name: 'cryptid-api',
   },
+  connect_timeout: 10,
+  ssl: env.NODE_ENV === 'production' ? 'require' : false,
 })
 
 export const db = drizzle(client, { schema })
