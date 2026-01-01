@@ -30,7 +30,7 @@ export class SearchCryptidsUseCase {
 
       const result = await this.cryptidsRepository.search(dto.query, filters, pagination)
 
-      const summaries = result.data.map(item => CryptidMapper.toSummary(item))
+      const summaries = result.data.map(item => CryptidMapper.toSummary(item)) as CryptidSummaryDTO[]
 
       return right({
         data: summaries,

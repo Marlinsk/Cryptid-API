@@ -10,7 +10,6 @@ const fieldsParamSchema = z
 
 export const listCryptidsSchema = z.object({
   search: z.string().min(1).optional(),
-  habitat: z.union([z.coerce.number().int().positive(), multivaluedNumberSchema]).optional(),
   classification: z.union([z.coerce.number().int().positive(), multivaluedNumberSchema]).optional(),
   status: z.union([z.string().min(1), multivaluedStringSchema]).optional(),
   threatLevel: z.union([z.string().min(1), multivaluedStringSchema]).optional(),

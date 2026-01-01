@@ -158,10 +158,12 @@ GET /cryptids/search?query=shadow&page=1&limit=20
 ### Example
 
 ```bash
+GET /api/v1/cryptids?sortBy=name&order=desc&page=1&limit=20
 ```
 
 **Flow**:
 1. Applies filters (if any)
+2. **Sorts** by specified field and order
 3. **Paginates** the sorted results
 
 ---
@@ -364,6 +366,7 @@ GET /cryptids?page=1&limit=10
 
 **Request**:
 ```bash
+GET /api/v1/cryptids?classification=1&hasImages=true&page=2&limit=20
 ```
 
 **Response**:

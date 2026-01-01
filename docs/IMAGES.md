@@ -6,7 +6,7 @@ This document provides comprehensive information about the Images endpoints in t
 
 - [Overview](#overview)
 - [Endpoints](#endpoints)
-  - [Get Cryptid Images](#get-cryptid-images)
+- [Get Cryptid Images](#get-cryptid-images)
 - [Query Parameters](#query-parameters)
 - [Response Format](#response-format)
 - [Examples](#examples)
@@ -33,9 +33,9 @@ GET /api/v1/cryptids/:id/images
 
 #### Path Parameters
 
-| Parameter | Type   | Required | Description                        |
-|-----------|--------|----------|------------------------------------|
-| `id`      | number | Yes      | The unique identifier of the cryptid |
+| Parameter | Type   | Required | Description                                       |
+|-----------|--------|----------|---------------------------------------------------|
+| `id`      | number | Yes      | The unique identifier of the cryptid (positive integer) |
 
 #### Query Parameters
 
@@ -52,16 +52,20 @@ GET /api/v1/cryptids/:id/images
 {
   "data": [
     {
-      "id": "1",
+      "id": "01936f3e-82a1-7890-b2c3-d4e5f6a7b8c9",
       "url": "https://example.com/images/cryptid-1.jpg",
+      "size": "2:3",
       "altText": "A mysterious creature in the forest",
       "source": "Wildlife Photography Archive",
+      "license": "CC BY-NC 4.0"
     },
     {
-      "id": "2",
+      "id": "01936f3e-82a1-7890-b2c3-d4e5f6a7b8ca",
       "url": "https://example.com/images/cryptid-2.jpg",
+      "size": "2:3",
       "altText": "Close-up of creature footprint",
       "source": "Cryptozoology Research Institute",
+      "license": "CC BY-NC 4.0"
     }
   ],
   "meta": {
@@ -73,11 +77,12 @@ GET /api/v1/cryptids/:id/images
       "hasNext": false,
       "hasPrevious": false
     },
-    "retrievedAt": "2025-12-27T12:00:00.000Z",
-    "requestId": "req_abc123"
+    "retrievedAt": "2025-12-31T12:00:00.000Z"
   },
   "links": {
-    "self": "/cryptids/1/images?page=1"
+    "self": "/api/v1/cryptids/1/images?page=1&limit=10",
+    "first": "/api/v1/cryptids/1/images?page=1&limit=10",
+    "last": "/api/v1/cryptids/1/images?page=1&limit=10"
   }
 }
 ```
@@ -98,11 +103,12 @@ When a cryptid has no images, the API returns an empty data array:
       "hasNext": false,
       "hasPrevious": false
     },
-    "retrievedAt": "2025-12-27T12:00:00.000Z",
-    "requestId": "req_abc456"
+    "retrievedAt": "2025-12-31T12:00:00.000Z"
   },
   "links": {
-    "self": "/cryptids/1/images?page=1"
+    "self": "/api/v1/cryptids/1/images?page=1&limit=10",
+    "first": "/api/v1/cryptids/1/images?page=1&limit=10",
+    "last": "/api/v1/cryptids/1/images?page=1&limit=10"
   }
 }
 ```
@@ -113,10 +119,12 @@ When a cryptid has no images, the API returns an empty data array:
 
 | Field     | Type   | Description                                      |
 |-----------|--------|--------------------------------------------------|
-| `id`      | string | Unique identifier for the image                  |
+| `id`      | string | Unique identifier for the image (UUIDv7)         |
 | `url`     | string | Direct URL to the image file                     |
+| `size`    | string | Image aspect ratio (e.g., "2:3", "16:9")         |
 | `altText` | string | Alternative text description for accessibility   |
 | `source`  | string | Source or attribution of the image               |
+| `license` | string | License information for the image                |
 
 ##### Pagination Metadata
 
@@ -170,10 +178,12 @@ GET /api/v1/cryptids/1/images
 {
   "data": [
     {
-      "id": "1",
+      "id": "01936f3e-82a1-7890-b2c3-d4e5f6a7b8cb",
       "url": "https://cdn.example.com/bigfoot-1.jpg",
+      "size": "2:3",
       "altText": "Bigfoot sighting in Pacific Northwest forest",
       "source": "National Cryptid Database",
+      "license": "CC BY-NC 4.0"
     }
   ],
   "meta": {
@@ -185,8 +195,7 @@ GET /api/v1/cryptids/1/images
       "hasNext": false,
       "hasPrevious": false
     },
-    "retrievedAt": "2025-12-27T12:30:00.000Z",
-    "requestId": "req_xyz789"
+    "retrievedAt": "2025-12-31T12:30:00.000Z"
   }
 }
 ```
@@ -225,9 +234,6 @@ When requesting images for a non-existent cryptid:
       "resource": "Cryptid",
       "id": 999
     }
-  },
-  "meta": {
-    "requestId": "req_error123"
   }
 }
 ```
@@ -245,9 +251,6 @@ When providing invalid query parameters:
       "page": "must be a positive integer",
       "limit": "must be between 1 and 100"
     }
-  },
-  "meta": {
-    "requestId": "req_error456"
   }
 }
 ```
@@ -262,8 +265,10 @@ When providing invalid query parameters:
 interface Image {
   id: string
   url: string
+  size: string
   altText: string
   source: string
+  license: string
 }
 
 async function getCryptidImages(cryptidId: number, page = 1, limit = 10): Promise<Image[]> {
@@ -328,8 +333,10 @@ curl -X GET "https://api.example.com/api/v1/cryptids/1/images" | jq .
 
 ### Image Usage
 
+1. **Respect licenses**: Check the `license` field before using images. Most images use CC BY-NC 4.0.
 2. **Provide attribution**: Use the `source` field to properly attribute images.
 3. **Accessibility**: Use the `altText` field for screen readers and alt attributes.
+4. **Aspect ratios**: Use the `size` field to maintain proper image display ratios.
 
 ### Pagination
 
@@ -344,10 +351,13 @@ curl -X GET "https://api.example.com/api/v1/cryptids/1/images" | jq .
 - **Endpoint**: `GET /api/v1/cryptids/:id/images`
 - **Authentication**: Not required
 - **Pagination**: Yes (default: page=1, limit=10, max limit=100)
-- **Filters**: None
+- **Filters**: None (only by cryptid ID via path parameter)
 - **Response Format**: JSON with `data`, `meta`, and `links` fields
+- **Image ID Format**: UUIDv7
+- **Sorting**: Images are ordered by creation date (oldest first)
 - **Rate Limit**: Standard API limits apply
 - **Empty Results**: Returns 200 OK with empty `data` array
+- **Error Handling**: Returns 404 if cryptid doesn't exist, 400 for invalid parameters
 
 ---
 

@@ -206,6 +206,7 @@ Location: `src/modules/cryptids/infra/repositories/drizzle-cryptids.repository.t
 
 ### List all cryptids (Summary)
 ```bash
+GET /api/v1/cryptids?page=1&limit=10
 ```
 
 ### Search cryptids (Summary)
