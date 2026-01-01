@@ -3,13 +3,10 @@ import type { Image } from '../entities/image.entity'
 
 export interface ListImagesFilters {
   cryptidId: number
-  license?: string
 }
 
 export interface IImagesRepository {
-  findById(id: number): Promise<Image | null>
-  findByCryptidId(
-    filters: ListImagesFilters,
-    pagination: PaginationParams
-  ): Promise<PaginatedResult<Image>>
+  findById(id: string): Promise<Image | null>
+  findByCryptidId(filters: ListImagesFilters, pagination: PaginationParams): Promise<PaginatedResult<Image>>
+  findAll(pagination: PaginationParams): Promise<PaginatedResult<Image>>
 }

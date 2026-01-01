@@ -5,7 +5,6 @@ export interface TestCryptid {
   name: string
   aliases: string[]
   classification: string
-  realm: string
   habitat: string
   status: string
   threatLevel: string
@@ -18,7 +17,6 @@ export interface TestCryptid {
   lastSightedYear?: number
   isVerified: boolean
   createdAt: Date
-  updatedAt: Date
 }
 
 export class TestFactory {
@@ -34,7 +32,6 @@ export class TestFactory {
         'aerial',
         'interdimensional',
       ]),
-      realm: faker.helpers.arrayElement(['physical', 'ethereal', 'spectral', 'dreamscape']),
       habitat: faker.helpers.arrayElement(['forest', 'ocean', 'desert', 'mountains', 'urban']),
       status: faker.helpers.arrayElement(['active', 'dormant', 'legendary']),
       threatLevel: faker.helpers.arrayElement(['low', 'medium', 'high', 'extreme']),
@@ -46,7 +43,6 @@ export class TestFactory {
       lastSightedYear: faker.number.int({ min: 2000, max: 2024 }),
       isVerified: faker.datatype.boolean(),
       createdAt: faker.date.past(),
-      updatedAt: faker.date.recent(),
       ...overrides,
     }
   }
@@ -57,10 +53,6 @@ export class TestFactory {
 
   static createCryptidWithClassification(classification: string): TestCryptid {
     return TestFactory.createCryptid({ classification })
-  }
-
-  static createCryptidWithRealm(realm: string): TestCryptid {
-    return TestFactory.createCryptid({ realm })
   }
 
   static createVerifiedCryptid(): TestCryptid {

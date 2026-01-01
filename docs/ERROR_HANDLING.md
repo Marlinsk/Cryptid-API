@@ -69,8 +69,6 @@ Used in endpoints that return collections/lists of resources.
       "id": "1",
       "name": "The Nameless Watcher",
       "classification": "Cosmic Entity",
-      "realm": "Extradimensional",
-      "habitat": "Void",
       "status": "Reported",
       "threatLevel": "High",
       "sightingsCount": 12,
@@ -87,17 +85,12 @@ Used in endpoints that return collections/lists of resources.
       "hasPrevious": false
     },
     "appliedFilters": {
-      "realm": 1,
       "hasImages": true
     },
     "retrievedAt": "2025-01-12T14:33:21Z",
     "requestId": "req_1736694801_xk92f1"
   },
   "links": {
-    "self": "/cryptids?page=1&realm=1&hasImages=true",
-    "next": "/cryptids?page=2&realm=1&hasImages=true",
-    "first": "/cryptids?page=1&realm=1&hasImages=true",
-    "last": "/cryptids?page=8&realm=1&hasImages=true"
   }
 }
 ```
@@ -151,12 +144,8 @@ Used in endpoints that return a single resource.
     "aliases": ["Watcher in the Void", "Silent Observer"],
     "description": "A cosmic entity observed at the edge of reality...",
     "classification": "Cosmic Entity",
-    "realm": "Extradimensional",
-    "habitat": "Void",
     "status": "Reported",
     "threatLevel": "High",
-    "firstReportedAt": "1923-04-11T00:00:00.000Z",
-    "lastReportedAt": "2019-03-15T00:00:00.000Z",
     "images": []
   },
   "meta": {
@@ -239,7 +228,6 @@ Errors related to input validation.
 | Code                     | Situation                              | Example                                    |
 | ------------------------ | -------------------------------------- | ------------------------------------------ |
 | `INVALID_QUERY`          | Malformed or invalid query string      | Parameters with incorrect format           |
-| `INVALID_FILTER`         | Invalid filter                         | `habitat=abc` (expected number)            |
 | `INVALID_SORT`           | Invalid sort field                     | `sort=invalid_field`                       |
 | `INVALID_PAGINATION`     | Incorrect pagination parameters        | `page=0` or `limit=1000`                   |
 | `INVALID_BODY`           | Invalid request body                   | Malformed JSON or missing fields           |
@@ -255,7 +243,6 @@ Errors related to input validation.
     "message": "One or more filters are invalid.",
     "details": [
       {
-        "field": "habitat",
         "issue": "invalid_type",
         "expected": "number or comma-separated numbers",
         "received": "abc"
@@ -389,7 +376,6 @@ GET /cryptids?page=0&limit=1000&sort=invalid_field
       {
         "field": "sort",
         "issue": "invalid_enum_value",
-        "expected": ["id", "name", "status", "threatLevel", "createdAt", "updatedAt"],
         "received": "invalid_field"
       }
     ],

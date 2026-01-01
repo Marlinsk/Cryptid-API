@@ -1,5 +1,5 @@
 import { db } from '@infra/database/connection'
-import { classifications, cryptids, habitats, images, realms } from '@infra/database/schemas'
+import { classifications, cryptids, images } from '@infra/database/schemas'
 import type { PaginatedResult, PaginationParams, SortParams } from '@shared/types/pagination'
 import { and, count, eq, exists, inArray, like, or, sql } from 'drizzle-orm'
 import { injectable } from 'tsyringe'
@@ -28,13 +28,9 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       .select({
         cryptid: cryptids,
         classification: classifications.name,
-        realm: realms.name,
-        habitat: habitats.name,
       })
       .from(cryptids)
       .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-      .innerJoin(realms, eq(cryptids.realmId, realms.id))
-      .innerJoin(habitats, eq(cryptids.habitatId, habitats.id))
       .where(eq(cryptids.id, id))
       .limit(1)
 
@@ -42,14 +38,12 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       return null
     }
 
-    const { cryptid: cryptidData, classification, realm, habitat } = result[0]
+    const { cryptid: cryptidData, classification } = result[0]
     const cryptid = this.mapToDomain(cryptidData)
 
     const response: any = {
       cryptid,
       classification,
-      realm,
-      habitat,
     }
 
     if (include?.images) {
@@ -63,19 +57,12 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         .select({
           cryptid: cryptids,
           classification: classifications.name,
-          realm: realms.name,
-          habitat: habitats.name,
         })
         .from(cryptids)
         .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-        .innerJoin(realms, eq(cryptids.realmId, realms.id))
-        .innerJoin(habitats, eq(cryptids.habitatId, habitats.id))
         .where(
           and(
-            or(
-              eq(cryptids.realmId, cryptidData.realmId),
-              eq(cryptids.classificationId, cryptidData.classificationId)
-            ),
+            eq(cryptids.classificationId, cryptidData.classificationId),
             sql`${cryptids.id} != ${id}`
           )
         )
@@ -85,8 +72,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         relatedData.map(async item => ({
           cryptid: this.mapToDomain(item.cryptid),
           classification: item.classification,
-          realm: item.realm,
-          habitat: item.habitat,
           hasImages: await this.hasImages(item.cryptid.id),
         }))
       )
@@ -133,13 +118,9 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         .select({
           cryptid: cryptids,
           classification: classifications.name,
-          realm: realms.name,
-          habitat: habitats.name,
         })
         .from(cryptids)
         .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-        .innerJoin(realms, eq(cryptids.realmId, realms.id))
-        .innerJoin(habitats, eq(cryptids.habitatId, habitats.id))
         .where(and(...conditions))
         .limit(pagination.limit)
         .offset(offset)
@@ -157,8 +138,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       data.map(async item => ({
         cryptid: this.mapToDomain(item.cryptid),
         classification: item.classification,
-        realm: item.realm,
-        habitat: item.habitat,
         hasImages: await this.hasImages(item.cryptid.id),
       }))
     )
@@ -199,13 +178,9 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         .select({
           cryptid: cryptids,
           classification: classifications.name,
-          realm: realms.name,
-          habitat: habitats.name,
         })
         .from(cryptids)
         .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-        .innerJoin(realms, eq(cryptids.realmId, realms.id))
-        .innerJoin(habitats, eq(cryptids.habitatId, habitats.id))
         .where(and(...conditions))
         .limit(pagination.limit)
         .offset(offset),
@@ -222,8 +197,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       data.map(async item => ({
         cryptid: this.mapToDomain(item.cryptid),
         classification: item.classification,
-        realm: item.realm,
-        habitat: item.habitat,
         hasImages: await this.hasImages(item.cryptid.id),
       }))
     )
@@ -243,19 +216,13 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
 
   async findRelated(
     cryptidId: number,
-    relationType: 'similarHabitat' | 'sameRealm' | 'sameClassification'
+    relationType: 'sameClassification'
   ): Promise<CryptidWithRelations[]> {
     const baseCryptid = await this.findById(cryptidId)
     if (!baseCryptid) return []
 
     let condition
     switch (relationType) {
-      case 'similarHabitat':
-        condition = eq(cryptids.habitatId, baseCryptid.habitatId)
-        break
-      case 'sameRealm':
-        condition = eq(cryptids.realmId, baseCryptid.realmId)
-        break
       case 'sameClassification':
         condition = eq(cryptids.classificationId, baseCryptid.classificationId)
         break
@@ -265,13 +232,9 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       .select({
         cryptid: cryptids,
         classification: classifications.name,
-        realm: realms.name,
-        habitat: habitats.name,
       })
       .from(cryptids)
       .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-      .innerJoin(realms, eq(cryptids.realmId, realms.id))
-      .innerJoin(habitats, eq(cryptids.habitatId, habitats.id))
       .where(and(condition, sql`${cryptids.id} != ${cryptidId}`))
       .limit(10)
 
@@ -279,8 +242,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       result.map(async item => ({
         cryptid: this.mapToDomain(item.cryptid),
         classification: item.classification,
-        realm: item.realm,
-        habitat: item.habitat,
         hasImages: await this.hasImages(item.cryptid.id),
       }))
     )
@@ -288,22 +249,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
 
   private buildWhereConditions(filters: Partial<ListCryptidsFilters>) {
     const conditions: any[] = []
-
-    if (filters.habitat) {
-      conditions.push(
-        Array.isArray(filters.habitat)
-          ? inArray(cryptids.habitatId, filters.habitat)
-          : eq(cryptids.habitatId, filters.habitat)
-      )
-    }
-
-    if (filters.realm) {
-      conditions.push(
-        Array.isArray(filters.realm)
-          ? inArray(cryptids.realmId, filters.realm)
-          : eq(cryptids.realmId, filters.realm)
-      )
-    }
 
     if (filters.classification) {
       conditions.push(
@@ -357,10 +302,7 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       name: cryptids.name,
       status: cryptids.status,
       threatLevel: cryptids.threatLevel,
-      firstReportedAt: cryptids.firstReportedAt,
-      lastReportedAt: cryptids.lastReportedAt,
       createdAt: cryptids.createdAt,
-      updatedAt: cryptids.updatedAt,
     }
 
     const selectedColumn = columnMap[column] || cryptids.id
@@ -378,15 +320,9 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         physicalDescription: data.physicalDescription || null,
         behaviorNotes: data.behaviorNotes || null,
         manifestationConditions: data.manifestationConditions || null,
-        timelineSummary: data.timelineSummary || null,
-        containmentNotes: data.containmentNotes || null,
         classificationId: data.classificationId,
-        realmId: data.realmId,
-        habitatId: data.habitatId,
         status: data.status,
         threatLevel: data.threatLevel,
-        firstReportedAt: data.firstReportedAt,
-        lastReportedAt: data.lastReportedAt,
       },
       data.id
     )
@@ -397,6 +333,7 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       {
         cryptidId: data.cryptidId,
         url: data.url,
+        size: data.imageSize,
         altText: data.altText,
         source: data.source,
         license: data.license,

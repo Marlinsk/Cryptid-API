@@ -120,21 +120,15 @@ describe('Search: Full-text Search', () => {
       expect(result.data.every(c => c.name.toLowerCase().includes('shadow'))).toBe(true)
     })
 
-    it('should combine search with realm filter', async () => {
       repository.setData([
-        TestFactory.createCryptid({ name: 'Ethereal Shadow', realm: 'ethereal' }),
-        TestFactory.createCryptid({ name: 'Physical Shadow', realm: 'physical' }),
-        TestFactory.createCryptid({ name: 'Spectral Shadow', realm: 'spectral' }),
       ])
 
       const result = await repository.search('shadow', {
-        realm: ['ethereal', 'spectral'],
         page: 1,
         limit: 10,
       })
 
       expect(result.data).toHaveLength(2)
-      expect(result.data.every(c => c.realm === 'ethereal' || c.realm === 'spectral')).toBe(true)
     })
 
     it('should combine search with verification filter', async () => {
@@ -176,21 +170,18 @@ describe('Search: Full-text Search', () => {
         TestFactory.createCryptid({
           name: 'Cosmic Shadow',
           classification: 'cosmic',
-          realm: 'ethereal',
           isVerified: true,
           dangerLevel: 8,
         }),
         TestFactory.createCryptid({
           name: 'Cosmic Shadow Being',
           classification: 'cosmic',
-          realm: 'physical',
           isVerified: true,
           dangerLevel: 9,
         }),
         TestFactory.createCryptid({
           name: 'Terrestrial Shadow',
           classification: 'terrestrial',
-          realm: 'ethereal',
           isVerified: true,
           dangerLevel: 8,
         }),
@@ -198,7 +189,6 @@ describe('Search: Full-text Search', () => {
 
       const result = await repository.search('shadow', {
         classification: ['cosmic'],
-        realm: ['ethereal'],
         isVerified: true,
         minDangerLevel: 7,
         page: 1,

@@ -8,7 +8,7 @@ import type { IImagesRepository, ListImagesFilters } from '../../domain/reposito
 
 @injectable()
 export class DrizzleImagesRepository implements IImagesRepository {
-  async findById(id: number): Promise<Image | null> {
+  async findById(id: string): Promise<Image | null> {
     const result = await db.select().from(images).where(eq(images.id, id)).limit(1)
 
     if (!result[0]) {
@@ -23,10 +23,6 @@ export class DrizzleImagesRepository implements IImagesRepository {
     pagination: PaginationParams
   ): Promise<PaginatedResult<Image>> {
     const conditions: any[] = [eq(images.cryptidId, filters.cryptidId)]
-
-    if (filters.license) {
-      conditions.push(eq(images.license, filters.license))
-    }
 
     const offset = (pagination.page - 1) * pagination.limit
 
@@ -60,11 +56,41 @@ export class DrizzleImagesRepository implements IImagesRepository {
     }
   }
 
+  async findAll(pagination: PaginationParams): Promise<PaginatedResult<Image>> {
+    const offset = (pagination.page - 1) * pagination.limit
+
+    const [data, totalResult] = await Promise.all([
+      db
+        .select()
+        .from(images)
+        .limit(pagination.limit)
+        .offset(offset)
+        .orderBy(images.createdAt),
+      db.select({ count: count() }).from(images),
+    ])
+
+    const total = totalResult[0]?.count || 0
+    const totalPages = Math.ceil(total / pagination.limit)
+
+    return {
+      data: data.map(item => this.mapToDomain(item)),
+      pagination: {
+        page: pagination.page,
+        limit: pagination.limit,
+        totalItems: total,
+        totalPages,
+        hasNext: pagination.page < totalPages,
+        hasPrevious: pagination.page > 1,
+      },
+    }
+  }
+
   private mapToDomain(data: any): Image {
     return Image.create(
       {
         cryptidId: data.cryptidId,
         url: data.url,
+        size: data.imageSize,
         altText: data.altText,
         source: data.source,
         license: data.license,

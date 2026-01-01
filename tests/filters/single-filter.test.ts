@@ -48,40 +48,34 @@ describe('Filters: Single Value Filters', () => {
     })
   })
 
-  describe('Realm Filter', () => {
-    it('should filter by single realm', async () => {
+  describe(' Filter', () => {
       repository.setData([
-        TestFactory.createCryptidWithRealm('ethereal'),
-        TestFactory.createCryptidWithRealm('physical'),
-        TestFactory.createCryptidWithRealm('spectral'),
+        TestFactory.createCryptidWith('ethereal'),
+        TestFactory.createCryptidWith('physical'),
+        TestFactory.createCryptidWith('spectral'),
       ])
 
       const result = await repository.list({
-        realm: ['ethereal'],
         page: 1,
         limit: 10,
       })
 
       expect(result.data).toHaveLength(1)
-      expect(result.data[0].realm).toBe('ethereal')
     })
 
-    it('should filter by multiple realms', async () => {
       repository.setData([
-        TestFactory.createCryptidWithRealm('ethereal'),
-        TestFactory.createCryptidWithRealm('physical'),
-        TestFactory.createCryptidWithRealm('spectral'),
-        TestFactory.createCryptidWithRealm('dreamscape'),
+        TestFactory.createCryptidWith('ethereal'),
+        TestFactory.createCryptidWith('physical'),
+        TestFactory.createCryptidWith('spectral'),
+        TestFactory.createCryptidWith('dreamscape'),
       ])
 
       const result = await repository.list({
-        realm: ['ethereal', 'spectral'],
         page: 1,
         limit: 10,
       })
 
       expect(result.data).toHaveLength(2)
-      expect(result.data.every(c => c.realm === 'ethereal' || c.realm === 'spectral')).toBe(true)
     })
   })
 

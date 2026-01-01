@@ -3,6 +3,7 @@ import { Entity } from '@/shared/domain/entity'
 interface ImageProps {
   cryptidId: number
   url: string
+  size: string
   altText: string
   source: string
   license: string
@@ -10,8 +11,8 @@ interface ImageProps {
 }
 
 export class Image extends Entity<ImageProps> {
-  private constructor(props: ImageProps, id: number) {
-    super(props, id.toString())
+  private constructor(props: ImageProps, id: string) {
+    super(props, id)
   }
 
   get cryptidId(): number {
@@ -20,6 +21,10 @@ export class Image extends Entity<ImageProps> {
 
   get url(): string {
     return this.props.url
+  }
+
+  get size(): string {
+    return this.props.size
   }
 
   get altText(): string {
@@ -38,7 +43,7 @@ export class Image extends Entity<ImageProps> {
     return this.props.createdAt
   }
 
-  public static create(props: Omit<ImageProps, 'createdAt'>, id: number): Image {
+  public static create(props: Omit<ImageProps, 'createdAt'>, id: string): Image {
     const image = new Image(
       {
         ...props,

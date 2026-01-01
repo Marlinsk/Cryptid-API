@@ -16,7 +16,6 @@ export interface PaginatedResult<T> {
 
 export interface ListFilters {
   classification?: string[]
-  realm?: string[]
   behavior?: string[]
   isVerified?: boolean
   minDangerLevel?: number
@@ -45,8 +44,6 @@ export class MockCryptidsRepository {
       filtered = filtered.filter(c => filters.classification!.includes(c.classification))
     }
 
-    if (filters.realm && filters.realm.length > 0) {
-      filtered = filtered.filter(c => filters.realm!.includes(c.realm))
     }
 
     if (filters.behavior && filters.behavior.length > 0) {
@@ -119,8 +116,6 @@ export class MockCryptidsRepository {
       filtered = filtered.filter(c => filters.classification!.includes(c.classification))
     }
 
-    if (filters.realm && filters.realm.length > 0) {
-      filtered = filtered.filter(c => filters.realm!.includes(c.realm))
     }
 
     if (filters.isVerified !== undefined) {

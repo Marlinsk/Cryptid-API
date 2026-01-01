@@ -9,37 +9,24 @@ describe('Filters: Combined Filters', () => {
     repository = new MockCryptidsRepository()
   })
 
-  it('should apply classification and realm filters', async () => {
     repository.setData([
-      TestFactory.createCryptid({ classification: 'cosmic', realm: 'ethereal' }),
-      TestFactory.createCryptid({ classification: 'cosmic', realm: 'physical' }),
-      TestFactory.createCryptid({ classification: 'terrestrial', realm: 'ethereal' }),
-      TestFactory.createCryptid({ classification: 'aquatic', realm: 'physical' }),
     ])
 
     const result = await repository.list({
       classification: ['cosmic'],
-      realm: ['ethereal'],
       page: 1,
       limit: 10,
     })
 
     expect(result.data).toHaveLength(1)
     expect(result.data[0].classification).toBe('cosmic')
-    expect(result.data[0].realm).toBe('ethereal')
   })
 
-  it('should apply multivalued classification and realm filters', async () => {
     repository.setData([
-      TestFactory.createCryptid({ classification: 'cosmic', realm: 'ethereal' }),
-      TestFactory.createCryptid({ classification: 'cosmic', realm: 'physical' }),
-      TestFactory.createCryptid({ classification: 'terrestrial', realm: 'ethereal' }),
-      TestFactory.createCryptid({ classification: 'aquatic', realm: 'spectral' }),
     ])
 
     const result = await repository.list({
       classification: ['cosmic', 'terrestrial'],
-      realm: ['ethereal'],
       page: 1,
       limit: 10,
     })
@@ -49,33 +36,27 @@ describe('Filters: Combined Filters', () => {
       result.data.every(
         c =>
           (c.classification === 'cosmic' || c.classification === 'terrestrial') &&
-          c.realm === 'ethereal'
       )
     ).toBe(true)
   })
 
-  it('should apply classification realm and behavior filters', async () => {
     repository.setData([
       TestFactory.createCryptid({
         classification: 'cosmic',
-        realm: 'ethereal',
         behavior: 'elusive',
       }),
       TestFactory.createCryptid({
         classification: 'cosmic',
-        realm: 'ethereal',
         behavior: 'aggressive',
       }),
       TestFactory.createCryptid({
         classification: 'terrestrial',
-        realm: 'physical',
         behavior: 'elusive',
       }),
     ])
 
     const result = await repository.list({
       classification: ['cosmic'],
-      realm: ['ethereal'],
       behavior: ['elusive'],
       page: 1,
       limit: 10,
@@ -83,7 +64,6 @@ describe('Filters: Combined Filters', () => {
 
     expect(result.data).toHaveLength(1)
     expect(result.data[0].classification).toBe('cosmic')
-    expect(result.data[0].realm).toBe('ethereal')
     expect(result.data[0].behavior).toBe('elusive')
   })
 
@@ -129,7 +109,6 @@ describe('Filters: Combined Filters', () => {
     repository.setData([
       TestFactory.createCryptid({
         classification: 'cosmic',
-        realm: 'ethereal',
         behavior: 'elusive',
         isVerified: true,
         dangerLevel: 7,
@@ -138,7 +117,6 @@ describe('Filters: Combined Filters', () => {
       }),
       TestFactory.createCryptid({
         classification: 'cosmic',
-        realm: 'ethereal',
         behavior: 'elusive',
         isVerified: true,
         dangerLevel: 3,
@@ -147,7 +125,6 @@ describe('Filters: Combined Filters', () => {
       }),
       TestFactory.createCryptid({
         classification: 'terrestrial',
-        realm: 'physical',
         behavior: 'aggressive',
         isVerified: false,
         dangerLevel: 9,
@@ -158,7 +135,6 @@ describe('Filters: Combined Filters', () => {
 
     const result = await repository.list({
       classification: ['cosmic'],
-      realm: ['ethereal'],
       behavior: ['elusive'],
       isVerified: true,
       minDangerLevel: 5,
@@ -172,7 +148,6 @@ describe('Filters: Combined Filters', () => {
     expect(result.data).toHaveLength(1)
     const cryptid = result.data[0]
     expect(cryptid.classification).toBe('cosmic')
-    expect(cryptid.realm).toBe('ethereal')
     expect(cryptid.behavior).toBe('elusive')
     expect(cryptid.isVerified).toBe(true)
     expect(cryptid.dangerLevel).toBeGreaterThanOrEqual(5)

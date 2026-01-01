@@ -9,6 +9,9 @@ import type { ListCryptidsDTO } from '../../../application/use-cases/list-crypti
 import { ListCryptidsUseCase } from '../../../application/use-cases/list-cryptids/list-cryptids.usecase'
 import type { SearchCryptidsDTO } from '../../../application/use-cases/search-cryptids/search-cryptids.dto'
 import { SearchCryptidsUseCase } from '../../../application/use-cases/search-cryptids/search-cryptids.usecase'
+import type { ListImagesByCryptidDTO } from '../../../application/use-cases/list-images-by-cryptid/list-images-by-cryptid.dto'
+import { ListImagesByCryptidUseCase } from '../../../application/use-cases/list-images-by-cryptid/list-images-by-cryptid.usecase'
+import { ImageMapper } from '../../../application/mappers/image.mapper'
 
 export class CryptidsController {
   async list(request: FastifyRequest<{ Querystring: ListCryptidsDTO }>, reply: FastifyReply) {
@@ -89,6 +92,41 @@ export class CryptidsController {
           images: `/cryptids/${request.params.id}/images`,
         },
       },
+    })
+
+    return reply.status(200).send(response)
+  }
+
+  async listImages(
+    request: FastifyRequest<{
+      Params: { id: number }
+      Querystring: Omit<ListImagesByCryptidDTO, 'cryptidId'>
+    }>,
+    reply: FastifyReply
+  ) {
+    const listImagesByCryptidUseCase = container.resolve(ListImagesByCryptidUseCase)
+    const result = await listImagesByCryptidUseCase.execute({
+      cryptidId: request.params.id,
+      ...request.query,
+    })
+
+    if (result.isLeft()) {
+      const error = result.value
+      throw new ApiError('INTERNAL_ERROR', error.message)
+    }
+
+    const { data, pagination } = result.value
+
+    const imageDTOs = data.map(image => ImageMapper.toDTO(image))
+
+    const appliedFilters = extractAppliedFilters(request.query)
+
+    const links = createPaginationLinks(`/cryptids/${request.params.id}/images`, pagination, appliedFilters)
+
+    const response = createListResponse(imageDTOs, pagination, {
+      appliedFilters: Object.keys(appliedFilters).length > 0 ? appliedFilters : undefined,
+      requestId: request.id as string,
+      links,
     })
 
     return reply.status(200).send(response)

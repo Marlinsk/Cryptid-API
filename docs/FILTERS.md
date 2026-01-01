@@ -63,7 +63,6 @@ Performs case-insensitive text search across multiple fields.
 GET /cryptids?search=watcher
 
 # Search combined with filters
-GET /cryptids?search=shadow&realm=1&hasImages=true
 
 # Search with pagination
 GET /cryptids?search=cosmic&page=2&limit=20
@@ -79,8 +78,6 @@ Filters that accept **single values** or **multi-valued** (array).
 
 | Filter           | Type             | Description                       | Example                        |
 | ---------------- | ---------------- | --------------------------------- | ------------------------------ |
-| `habitat`        | number or array  | Habitat ID or list of IDs         | `habitat=1` or `habitat=1,2,3` |
-| `realm`          | number or array  | Realm ID or list of IDs           | `realm=1` or `realm=1,2`       |
 | `classification` | number or array  | Classification ID or list         | `classification=1,2,3`         |
 | `status`         | string or array  | Status or list of statuses        | `status=reported,verified`     |
 | `threatLevel`    | string or array  | Threat level or list              | `threatLevel=high,critical`    |
@@ -91,7 +88,6 @@ When multiple values are provided (comma-separated), the semantics is **OR** (un
 
 ```bash
 # Habitat 1 OR Habitat 2 OR Habitat 3
-GET /cryptids?habitat=1,2,3
 
 # Status "reported" OR "verified"
 GET /cryptids?status=reported,verified
@@ -102,8 +98,6 @@ GET /cryptids?status=reported,verified
 When multiple **types** of filters are used, the semantics is **AND** (intersection).
 
 ```bash
-# Realm 1 AND (Habitat 2 OR Habitat 3)
-GET /cryptids?realm=1&habitat=2,3
 
 # Classification 1 AND Status "reported" AND ThreatLevel "high"
 GET /cryptids?classification=1&status=reported&threatLevel=high
@@ -113,13 +107,11 @@ GET /cryptids?classification=1&status=reported&threatLevel=high
 
 ```bash
 # Single simple filter
-GET /cryptids?realm=1
 
 # Single multi-valued filter
 GET /cryptids?classification=1,2,3
 
 # Multiple combined filters
-GET /cryptids?realm=1&habitat=2,3&status=reported
 
 # Filters + pagination
 GET /cryptids?threatLevel=high,critical&page=2&limit=50
@@ -150,44 +142,6 @@ Filters that verify **presence or absence** of related data.
 GET /cryptids?hasImages=true
 
 # Combine with other filters
-GET /cryptids?realm=1&hasImages=true&threatLevel=high
-```
-
----
-
-### 4. Range Filters
-
-Filters that define **numeric ranges** (min/max).
-
-#### Available Filters
-
-| Filter            | Type   | Range | Description                        | Example             |
-| ----------------- | ------ | ----- | ---------------------------------- | ------------------- |
-| `threatLevelMin`  | number | 0-10  | Minimum threat level (inclusive)   | `threatLevelMin=5`  |
-| `threatLevelMax`  | number | 0-10  | Maximum threat level (inclusive)   | `threatLevelMax=8`  |
-
-#### Behavior
-
-* `threatLevelMin=5` → Returns cryptids with threatLevel >= 5
-* `threatLevelMax=8` → Returns cryptids with threatLevel <= 8
-* `threatLevelMin=5&threatLevelMax=8` → Returns cryptids with threatLevel between 5 and 8 (inclusive)
-
-**Note**: These filters are prepared for future use when the `threatLevel` field becomes numeric.
-
-#### Examples
-
-```bash
-# Minimum threat of 7
-GET /cryptids?threatLevelMin=7
-
-# Maximum threat of 5
-GET /cryptids?threatLevelMax=5
-
-# Threat between 5 and 8
-GET /cryptids?threatLevelMin=5&threatLevelMax=8
-
-# Combine with other filters
-GET /cryptids?realm=1&threatLevelMin=7&hasImages=true
 ```
 
 ---
@@ -200,7 +154,6 @@ Controls the **order** of results before pagination.
 
 | Parameter | Type   | Allowed Values                                                      | Default |
 | --------- | ------ | ------------------------------------------------------------------- | ------- |
-| `sort`    | string | `id`, `name`, `status`, `threatLevel`, `firstReportedAt`, `lastReportedAt`, `createdAt`, `updatedAt` | `id`    |
 | `order`   | string | `asc`, `desc`                                                       | `asc`   |
 
 ### Behavior
@@ -216,10 +169,8 @@ Controls the **order** of results before pagination.
 GET /cryptids?sort=name&order=asc
 
 # Sort by last sighting (most recent first)
-GET /cryptids?sort=lastReportedAt&order=desc
 
 # Combine with filters
-GET /cryptids?realm=1&sort=threatLevel&order=desc&page=1
 ```
 
 ---
@@ -231,18 +182,15 @@ All filters can be combined freely following the pipeline.
 ### Complex Example
 
 ```bash
-GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&hasImages=true&threatLevelMin=5&sort=lastReportedAt&order=desc&page=2&limit=20
 ```
 
 **Interpretation**:
 1. **Search**: Search for "shadow" in name, aliases, description, origin
 2. **Filters**:
-   - Realm 1 OR Realm 2
    - AND Classification 3
    - AND Status "reported" OR "verified"
    - AND Has images
-   - AND ThreatLevel >= 5
-3. **Sort**: Sort by `lastReportedAt` descending
+   - AND ThreatLevel high OR critical
 4. **Pagination**: Return page 2 with 20 items
 
 ---
@@ -252,9 +200,7 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 | Type          | Filters                                                    | Semantics          | Example                          |
 | ------------- | ---------------------------------------------------------- | ------------------ | -------------------------------- |
 | **Search**    | `search`                                                   | OR between fields  | `search=watcher`                 |
-| **Simple**    | `habitat`, `realm`, `classification`, `status`, `threatLevel` | OR multi-valued, AND between filters | `habitat=1,2&realm=3`            |
 | **Boolean**   | `hasImages`                                | Presence/absence   | `hasImages=true`                 |
-| **Range**     | `threatLevelMin`, `threatLevelMax`                         | Numeric range      | `threatLevelMin=5&threatLevelMax=8` |
 | **Sort**      | `sort`, `order`                                            | Sorting            | `sort=name&order=asc`            |
 | **Pagination**| `page`, `limit`                                            | Offset+limit       | `page=2&limit=50`                |
 
@@ -268,7 +214,6 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 * **Numeric filters**: positive integers
 * **Multi-valued filters**: individual validation of each value
 * **Booleans**: "true" or "false" (case-insensitive)
-* **Range**: numbers between 0 and 10
 * **Sort**: only allowed fields (see list above)
 * **Order**: only "asc" or "desc"
 * **Page**: number >= 1
@@ -281,7 +226,6 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 {
   "error": "Validation failed",
   "details": {
-    "habitat": "Expected number or comma-separated numbers"
   }
 }
 ```
@@ -291,7 +235,6 @@ GET /cryptids?search=shadow&realm=1,2&classification=3&status=reported,verified&
 {
   "error": "Validation failed",
   "details": {
-    "sort": "Invalid sort field. Allowed: id, name, status, threatLevel, firstReportedAt, lastReportedAt, createdAt, updatedAt"
   }
 }
 ```
@@ -310,11 +253,7 @@ GET /cryptids?page=1&limit=20
 
 #### 2. Filter by Category
 ```bash
-# Cryptids from a specific realm
-GET /cryptids?realm=1&page=1&limit=20
 
-# Cryptids from multiple habitats
-GET /cryptids?habitat=1,2,3&page=1&limit=20
 ```
 
 #### 3. Text Search
@@ -332,7 +271,6 @@ GET /cryptids?classification=1&hasImages=true&threatLevel=high,critical&page=1&l
 #### 5. Custom Sorting
 ```bash
 # Most recently reported first
-GET /cryptids?sort=lastReportedAt&order=desc&page=1&limit=20
 
 # Sort by name (A-Z)
 GET /cryptids?sort=name&order=asc&page=1&limit=50
@@ -354,7 +292,6 @@ GET /cryptids?search=shadow&hasImages=true&sort=name&order=asc&page=1&limit=10
 // Example: build filters dynamically
 const filters = {
   search: 'watcher',
-  realm: [1, 2],
   hasImages: true,
   sort: 'name',
   order: 'asc',
@@ -366,14 +303,12 @@ const filters = {
 const params = new URLSearchParams();
 
 if (filters.search) params.append('search', filters.search);
-if (filters.realm) params.append('realm', filters.realm.join(','));
 if (filters.hasImages !== undefined) params.append('hasImages', String(filters.hasImages));
 if (filters.sort) params.append('sort', filters.sort);
 if (filters.order) params.append('order', filters.order);
 params.append('page', String(filters.page));
 params.append('limit', String(filters.limit));
 
-// Result: search=watcher&realm=1,2&hasImages=true&sort=name&order=asc&page=1&limit=20
 ```
 
 ### Showing Active Filters
@@ -383,7 +318,6 @@ params.append('limit', String(filters.limit));
 const appliedFilters = [];
 
 if (params.has('search')) appliedFilters.push({ type: 'search', value: params.get('search') });
-if (params.has('realm')) appliedFilters.push({ type: 'realm', value: params.get('realm').split(',') });
 if (params.has('hasImages')) appliedFilters.push({ type: 'hasImages', value: params.get('hasImages') });
 
 // Render chips/tags for each active filter
@@ -431,8 +365,6 @@ For optimal performance, the following indexes are recommended:
 
 ```sql
 -- Simple filters
-CREATE INDEX idx_cryptids_habitat ON cryptids(habitat_id);
-CREATE INDEX idx_cryptids_realm ON cryptids(realm_id);
 CREATE INDEX idx_cryptids_classification ON cryptids(classification_id);
 CREATE INDEX idx_cryptids_status ON cryptids(status);
 CREATE INDEX idx_cryptids_threat_level ON cryptids(threat_level);
@@ -485,7 +417,6 @@ For advanced needs, operators can be added:
 
 ```bash
 # Future example: NOT, NOR
-GET /cryptids?realm=1&exclude_status=debunked
 ```
 
 ---

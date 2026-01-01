@@ -7,8 +7,6 @@ import { ImageMapper } from './image.mapper'
 export interface CryptidWithRelations {
   cryptid: Cryptid
   classification: string
-  realm: string
-  habitat: string
   hasImages?: boolean
   images?: Image[]
   relatedCryptids?: Array<CryptidWithRelations>
@@ -19,22 +17,26 @@ export interface MapperOptions {
 }
 
 export class CryptidMapper {
-  static toSummary(data: CryptidWithRelations): CryptidSummaryDTO {
-    const { cryptid, classification, realm, habitat, hasImages = false } = data
+  static toSummary(data: CryptidWithRelations, options?: MapperOptions): Partial<CryptidSummaryDTO> {
+    const { cryptid, classification, hasImages = false } = data
 
-    return {
+    const summary: CryptidSummaryDTO = {
       id: cryptid.id,
       name: cryptid.name,
       aliases: cryptid.aliases,
       classification,
-      realm,
-      habitat,
       status: cryptid.status,
       threatLevel: cryptid.threatLevel,
       hasImages,
       shortDescription: cryptid.shortDescription,
-      lastReportedAt: cryptid.lastReportedAt?.toISOString() || null,
+      createdAt: cryptid.createdAt.toISOString(),
     }
+
+    if (options?.fields && options.fields.length > 0) {
+      return pickFields(summary, options.fields)
+    }
+
+    return summary
   }
 
   static toDetail(
@@ -44,14 +46,11 @@ export class CryptidMapper {
     const {
       cryptid,
       classification,
-      realm,
-      habitat,
       images,
       relatedCryptids,
     } = data
 
-    // Base detail object without private fields
-    const baseDetail: Omit<CryptidDetailDTO, 'createdAt' | 'updatedAt'> = {
+    const detail: CryptidDetailDTO = {
       id: cryptid.id,
       name: cryptid.name,
       aliases: cryptid.aliases,
@@ -60,32 +59,18 @@ export class CryptidMapper {
       physicalDescription: cryptid.physicalDescription,
       behaviorNotes: cryptid.behaviorNotes,
       classification,
-      realm,
-      habitat,
       manifestationConditions: cryptid.manifestationConditions,
-      firstReportedAt: cryptid.firstReportedAt?.toISOString() || null,
-      lastReportedAt: cryptid.lastReportedAt?.toISOString() || null,
-      timelineSummary: cryptid.timelineSummary,
       status: cryptid.status,
       threatLevel: cryptid.threatLevel,
-      containmentNotes: cryptid.containmentNotes,
       images: images?.map(ImageMapper.toDTO),
-      relatedCryptids: relatedCryptids?.map(CryptidMapper.toSummary),
-    }
-
-    // Full detail with private fields (only used when explicitly requested)
-    const fullDetail: CryptidDetailDTO = {
-      ...baseDetail,
+      relatedCryptids: relatedCryptids?.map(rc => CryptidMapper.toSummary(rc)) as CryptidSummaryDTO[],
       createdAt: cryptid.createdAt.toISOString(),
-      updatedAt: cryptid.updatedAt.toISOString(),
     }
 
-    // Apply field selection if specified
     if (options?.fields && options.fields.length > 0) {
-      return pickFields(fullDetail, options.fields)
+      return pickFields(detail, options.fields)
     }
 
-    // Return without private fields by default
-    return baseDetail
+    return detail
   }
 }

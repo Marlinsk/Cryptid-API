@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-// Allowed fields for CryptidDetailDTO
 export const ALLOWED_DETAIL_FIELDS = [
   'id',
   'name',
@@ -10,30 +9,19 @@ export const ALLOWED_DETAIL_FIELDS = [
   'physicalDescription',
   'behaviorNotes',
   'classification',
-  'realm',
-  'habitat',
   'manifestationConditions',
-  'firstReportedAt',
-  'lastReportedAt',
-  'timelineSummary',
   'status',
   'threatLevel',
-  'containmentNotes',
   'images',
   'relatedCryptids',
-  'createdAt', // Private field - only returned when explicitly requested
-  'updatedAt', // Private field - only returned when explicitly requested
+  'createdAt',
 ] as const
 
 export type AllowedDetailField = (typeof ALLOWED_DETAIL_FIELDS)[number]
 
-// Public fields (returned by default)
-export const PUBLIC_DETAIL_FIELDS = ALLOWED_DETAIL_FIELDS.filter(
-  field => field !== 'createdAt' && field !== 'updatedAt'
-)
+export const PUBLIC_DETAIL_FIELDS = ALLOWED_DETAIL_FIELDS
 
-// Private fields (only returned when explicitly requested via fields parameter)
-export const PRIVATE_DETAIL_FIELDS = ['createdAt', 'updatedAt'] as const
+export const PRIVATE_DETAIL_FIELDS = [] as const
 
 export const includeParamSchema = z
   .string()
@@ -84,7 +72,6 @@ export function parseFieldsOptions(fields?: string[]): FieldSelectionOptions {
     return {}
   }
 
-  // Filter only allowed fields
   const validFields = fields.filter(field =>
     ALLOWED_DETAIL_FIELDS.includes(field as AllowedDetailField)
   )

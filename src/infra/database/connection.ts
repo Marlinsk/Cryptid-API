@@ -8,7 +8,6 @@ const connectionString = `postgresql://${env.DB_USER}:${env.DB_PASSWORD}@${env.D
 
 const client = postgres(connectionString, {
   prepare: false,
-  ssl: false,
   onnotice: () => {},
   connection: {
     application_name: 'cryptid-api',
