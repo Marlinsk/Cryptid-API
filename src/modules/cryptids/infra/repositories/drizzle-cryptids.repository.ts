@@ -333,8 +333,10 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
       {
         cryptidId: data.cryptidId,
         url: data.url,
+        size: data.imageSize,
         altText: data.altText,
         source: data.source,
+        license: data.license,
       },
       data.id
     )

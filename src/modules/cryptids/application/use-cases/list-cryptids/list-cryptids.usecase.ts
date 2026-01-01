@@ -19,8 +19,6 @@ export class ListCryptidsUseCase {
   async execute(dto: ListCryptidsDTO): Promise<Response> {
     try {
       const filters: ListCryptidsFilters = {
-        habitat: dto.habitat,
-        
         classification: dto.classification,
         status: dto.status,
         threatLevel: dto.threatLevel,
