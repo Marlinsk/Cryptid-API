@@ -6,7 +6,7 @@ This document provides comprehensive information about the Images endpoints in t
 
 - [Overview](#overview)
 - [Endpoints](#endpoints)
-  - [Get Cryptid Images](#get-cryptid-images)
+- [Get Cryptid Images](#get-cryptid-images)
 - [Query Parameters](#query-parameters)
 - [Response Format](#response-format)
 - [Examples](#examples)
