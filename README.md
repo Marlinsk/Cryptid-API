@@ -141,6 +141,9 @@ The API will be available at `http://localhost:3000`
 ### Cryptids
 - `GET /api/v1/cryptids` - List all cryptids (with filtering, search, pagination)
 - `GET /api/v1/cryptids/:id` - Get cryptid details by ID
+
+### Images
+- `GET /api/v1/cryptids/images` - List all images from all cryptids (paginated)
 - `GET /api/v1/cryptids/:id/images` - Get all images for a specific cryptid (paginated)
 
 ### Classifications
