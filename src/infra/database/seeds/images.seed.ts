@@ -60,14 +60,6 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
   },
   {
     cryptidId: 8,
-    url: 'https://cdn.midjourney.com/526bb05b-0f49-4c1c-9df2-4fcc775c6e19/0_1.png',
-    imageSize: '2:3',
-    altText: 'Gnome working in a gold mine, concept art',
-    source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
-    license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
-  },
-  {
-    cryptidId: 9,
     url: 'https://cdn.midjourney.com/4b350a0f-19f2-477f-b44b-dd2553c0e7cc/0_3.png',
     imageSize: '2:3',
     altText: 'Portrait of the Gargula',
@@ -75,7 +67,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 10,
+    cryptidId: 9,
     url: 'https://cdn.midjourney.com/2644661b-1d78-42c7-90a7-ffd78785782a/0_0.png',
     imageSize: '2:3',
     altText: 'Portrait of the Jersey Devil',
@@ -83,7 +75,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 11,
+    cryptidId: 10,
     url: 'https://cdn.midjourney.com/1120f588-9774-40e5-a1bb-dd5fac710520/0_0.png',
     imageSize: '2:3',
     altText: 'Batsquatch, concept art',
@@ -91,7 +83,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 12,
+    cryptidId: 11,
     url: 'https://cdn.midjourney.com/b6fd4e3b-ee2b-458d-82d6-8bc60a201032/0_2.png',
     imageSize: '2:3',
     altText: 'Realistic painting of the Holadeira',
@@ -99,7 +91,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 13,
+    cryptidId: 12,
     url: 'https://cdn.midjourney.com/d3950d23-7e5e-4123-b638-8f8f5efd192f/0_2.png',
     imageSize: '2:3',
     altText: 'Academic painting of the Beast of Gévaudan',
@@ -107,7 +99,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 14,
+    cryptidId: 13,
     url: 'https://cdn.midjourney.com/b600a449-0029-4f10-b211-682a727474a4/0_0.png',
     imageSize: '2:3',
     altText: 'Portrait of the Devil of Dover',
@@ -115,7 +107,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 15,
+    cryptidId: 14,
     url: 'https://cdn.midjourney.com/d37a31df-a7d5-46dd-bd9f-800c0437948f/0_3.png',
     imageSize: '2:3',
     altText: 'Realistic oil-painted depiction of a Jackalope with prominent deer antlers',
@@ -123,7 +115,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 16,
+    cryptidId: 15,
     url: 'https://cdn.midjourney.com/1daf885c-b12f-4ba2-beab-f8b5a0871336/0_1.png',
     imageSize: '2:3',
     altText: 'Alien Big Cats, concept art in natural environment',
@@ -131,15 +123,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 17,
-    url: 'https://cdn.midjourney.com/e126161a-8650-4fb3-8465-0aa590a1711b/0_0.png',
-    imageSize: '2:3',
-    altText: 'Skin Walker',
-    source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
-    license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
-  },
-  {
-    cryptidId: 18,
+    cryptidId: 16,
     url: 'https://cdn.midjourney.com/69828938-928e-4629-bf46-04434895e6dd/0_1.png',
     imageSize: '2:3',
     altText: 'Wendigo concept art',
@@ -147,7 +131,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 19,
+    cryptidId: 17,
     url: 'https://cdn.midjourney.com/ad7557bf-bb9f-42b1-9f02-f0fd25e588bf/0_3.png',
     imageSize: '2:3',
     altText: 'Academic painting of the Chuchunya',
@@ -155,7 +139,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 20,
+    cryptidId: 18,
     url: 'https://cdn.midjourney.com/76c12516-29cf-4f88-a6a9-b51384ae6784/0_3.png',
     imageSize: '2:3',
     altText: 'Concept art for an anatomical study of Leshy',
@@ -163,7 +147,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 21,
+    cryptidId: 19,
     url: 'https://cdn.midjourney.com/833d7d9d-23bd-485a-ada6-696fa948ca9d/0_1.png',
     imageSize: '2:3',
     altText: 'Beast of Bears entity',
@@ -171,7 +155,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 22,
+    cryptidId: 20,
     url: 'https://cdn.midjourney.com/e38e6815-1189-46fa-9c61-6f141249a1b6/0_2.png',
     imageSize: '2:3',
     altText: 'Thunderbird soaring through stormy clouds above a wide mountain valley',
@@ -179,7 +163,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 23,
+    cryptidId: 21,
     url: 'https://cdn.midjourney.com/5f5ed6c3-529d-4834-8290-b5aa8a1acaf2/0_3.png',
     imageSize: '2:3',
     altText: 'Agta sitting on a large tree branch in a misty jungle, smoking while watching the forest below',
@@ -187,7 +171,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 24,
+    cryptidId: 22,
     url: 'https://cdn.midjourney.com/6201e10e-1574-4fec-bfc5-fd5aea7f5f33/0_3.png',
     imageSize: '2:3',
     altText: 'Basilosaurus concept art',
@@ -195,7 +179,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 25,
+    cryptidId: 23,
     url: 'https://cdn.midjourney.com/523fc8c3-6027-4306-997b-4148c1accf87/0_3.png',
     imageSize: '2:3',
     altText: 'Concept art of Champ',
@@ -203,7 +187,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 26,
+    cryptidId: 24,
     url: 'https://cdn.midjourney.com/5f568e3b-c771-4770-9866-3022600648ae/0_0.png',
     imageSize: '2:3',
     altText: "Concept art of Caboclo d'Água, the beast responsible for disturbing fishermen on the São Francisco River",
@@ -211,7 +195,7 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 27,
+    cryptidId: 25,
     url: 'https://cdn.midjourney.com/d66eb724-99c1-4378-9324-79a6dd7f885b/0_2.png',
     imageSize: '2:3',
     altText: 'Academic painting of Fear Liath Moor',
@@ -219,10 +203,26 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
   {
-    cryptidId: 28,
+    cryptidId: 26,
     url: 'https://cdn.midjourney.com/b1072c7b-102e-4257-8ed8-9cdce4240f98/0_1.png',
     imageSize: '2:3',
     altText: 'Academic painting of Momo, the Missouri monster',
+    source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
+    license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
+  },
+  {
+    cryptidId: 27,
+    url: 'https://cdn.midjourney.com/e126161a-8650-4fb3-8465-0aa590a1711b/0_0.png',
+    imageSize: '2:3',
+    altText: 'Skin Walker',
+    source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
+    license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
+  },
+  {
+    cryptidId: 28,
+    url: 'https://cdn.midjourney.com/69d388e9-d316-44c5-9e70-c5d8d2d42b10/0_2.png',
+    imageSize: '2:3',
+    altText: 'The Varginha Devil',
     source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
@@ -236,9 +236,9 @@ export const imageSeedData: Array<typeof images.$inferInsert> = [
   },
   {
     cryptidId: 30,
-    url: 'https://cdn.midjourney.com/69d388e9-d316-44c5-9e70-c5d8d2d42b10/0_2.png',
+    url: 'https://cdn.midjourney.com/526bb05b-0f49-4c1c-9df2-4fcc775c6e19/0_1.png',
     imageSize: '2:3',
-    altText: 'The Varginha Devil',
+    altText: 'Gnome working in a gold mine, concept art',
     source: 'Image created by AI using artwork and images from the internet about the cryptid as inspiration.',
     license: 'Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)',
   },
