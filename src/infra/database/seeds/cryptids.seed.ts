@@ -3,6 +3,7 @@ import { cryptids } from '../schemas/cryptids.schema'
 
 export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
   {
+    "id": 1,
     "name": "Nessie",
     "aliases": [
       "Loch Ness Monster",
@@ -20,6 +21,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "low"
   },
   {
+    "id": 2,
     "name": "Bigfoot",
     "aliases": [
       "Sasquatch"
@@ -35,6 +37,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "medium"
   },
   {
+    "id": 3,
     "name": "Mothman",
     "aliases": [
       "The Winged Apparition",
@@ -52,6 +55,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 4,
     "name": "Chupacabra",
     "aliases": [
       "Goat Sucker",
@@ -68,6 +72,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 5,
     "name": "Megalodon",
     "aliases": [
       "Otodus megalodon",
@@ -84,6 +89,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "extreme"
   },
   {
+    "id": 6,
     "name": "Kraken",
     "aliases": [
       "Giant Squid",
@@ -100,6 +106,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "extreme"
   },
   {
+    "id": 7,
     "name": "Yeti",
     "aliases": [
       "Abominable Snowman",
@@ -118,6 +125,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "medium"
   },
   {
+    "id": 8,
     "name": "Gargula",
     "aliases": [
       "Gargoyle of Los Angeles",
@@ -134,6 +142,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "medium"
   },
   {
+    "id": 9,
     "name": "Jersey Devil",
     "aliases": [
       "Devil of the Pines",
@@ -151,6 +160,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "medium"
   },
   {
+    "id": 10,
     "name": "Batsquatch",
     "aliases": [
       "Pacific Northwest Bat Beast",
@@ -168,6 +178,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 11,
     "name": "Holadeira",
     "aliases": [
       "Holadeira",
@@ -185,6 +196,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "low"
   },
   {
+    "id": 12,
     "name": "Beast of Gévaudan",
     "aliases": [
       "Gévaudan Beast",
@@ -201,6 +213,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 13,
     "name": "Dover Demon",
     "aliases": [
       "Dover Demon"
@@ -216,6 +229,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "low"
   },
   {
+    "id": 14,
     "name": "Jackalope",
     "aliases": [
       "Antlered Jackrabbit",
@@ -232,6 +246,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "low"
   },
   {
+    "id": 15,
     "name": "Phantom Cats",
     "aliases": [
       "Alien Big Cats",
@@ -249,6 +264,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "medium"
   },
   {
+    "id": 16,
     "name": "Wendigo",
     "aliases": [
       "Windigo",
@@ -266,6 +282,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "extreme"
   },
   {
+    "id": 17,
     "name": "Chuchunya",
     "aliases": [
       "Chuchunaa",
@@ -282,6 +299,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 18,
     "name": "Leshy",
     "aliases": [
       "Lesovik",
@@ -300,6 +318,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "contextual"
   },
   {
+    "id": 19,
     "name": "Beast of Bears",
     "aliases": [
       "Bear Beast",
@@ -317,6 +336,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 20,
     "name": "Thunderbird",
     "aliases": [
       "Wakinyan",
@@ -335,6 +355,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 21,
     "name": "Agta",
     "aliases": [
       "Pygmy Tiger",
@@ -352,6 +373,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 22,
     "name": "Basilosaurus",
     "aliases": [
       "King Lizard",
@@ -369,6 +391,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 23,
     "name": "Champ",
     "aliases": [
       "Lake Champlain Monster",
@@ -386,7 +409,8 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
-    "name": "Caboclo d’Água",
+    "id": 24,
+    "name": "Caboclo d'Água",
     "aliases": [
       "Caboco d’Água",
       "Homem d’Água",
@@ -403,6 +427,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 25,
     "name": "Fear Liath Moor",
     "aliases": [
       "Am Fear Liath Mòr",
@@ -420,6 +445,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 26,
     "name": "Momo",
     "aliases": [
       "Momo the Monster",
@@ -437,6 +463,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 27,
     "name": "Skin Walkers",
     "aliases": [
       "Skin-Walkers",
@@ -454,6 +481,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "high"
   },
   {
+    "id": 28,
     "name": "Varginha Devil",
     "aliases": [
       "Diabo de Varginha",
@@ -471,6 +499,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 29,
     "name": "Owlman",
     "aliases": [
       "The Owl Man of Cornwall",
@@ -487,6 +516,7 @@ export const cryptidSeedData: Array<typeof cryptids.$inferInsert> = [
     "threatLevel": "moderate"
   },
   {
+    "id": 30,
     "name": "Gnome",
     "aliases": [
       "Earth Spirit",
@@ -508,7 +538,7 @@ export async function seedCryptids() {
   try {
     console.log('Starting cryptids seed...')
 
-    const inserted = await db.insert(cryptids).values(cryptidSeedData).returning()
+    const inserted = await db.insert(cryptids).values(cryptidSeedData).onConflictDoNothing().returning()
 
     console.log(`✓ Successfully inserted ${inserted.length} cryptids`)
     return inserted
