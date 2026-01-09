@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/server.ts",
-    "build": "tsc --project tsconfig.build.json && tsc-alias && pnpm copy:migrations",
-    "copy:migrations": "mkdir -p dist/infra/database/migrations && cp -r src/infra/database/migrations/* dist/infra/database/migrations/",
+    "build": "tsc --project tsconfig.build.json && tsc-alias",
     "start": "node dist/server.js",
     "start:prod": "pnpm db:migrate && pnpm db:seed:prod && pnpm start",
     "db:generate": "drizzle-kit generate",
