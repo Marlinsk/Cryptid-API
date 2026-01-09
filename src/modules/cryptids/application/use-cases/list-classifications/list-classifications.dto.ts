@@ -8,7 +8,7 @@ const fieldsParamSchema = z
   .optional()
 
 export const listClassificationsSchema = z.object({
-  categoryType: z.enum(['physical', 'narrative', 'abstract']).optional(),
+  categoryType: z.string().min(1).optional(),
   page: paginationQuerySchema.shape.page,
   limit: paginationQuerySchema.shape.limit,
   sort: z.enum(['id', 'name', 'categoryType']).default('id'),

@@ -3,7 +3,7 @@ import { Entity } from '@/shared/domain/entity'
 interface ClassificationProps {
   name: string
   description: string
-  categoryType: 'physical' | 'narrative' | 'abstract'
+  categoryType: string
   createdAt: Date
 }
 
@@ -20,7 +20,7 @@ export class Classification extends Entity<ClassificationProps> {
     return this.props.description
   }
 
-  get categoryType(): 'physical' | 'narrative' | 'abstract' {
+  get categoryType(): string {
     return this.props.categoryType
   }
 
