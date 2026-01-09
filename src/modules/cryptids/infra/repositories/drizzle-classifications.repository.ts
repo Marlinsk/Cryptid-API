@@ -26,9 +26,7 @@ export class DrizzleClassificationsRepository implements IClassificationsReposit
     return result.map(data => this.mapToDomain(data))
   }
 
-  async findByCategoryType(
-    categoryType: 'physical' | 'narrative' | 'abstract'
-  ): Promise<Classification[]> {
+  async findByCategoryType(categoryType: string): Promise<Classification[]> {
     const result = await db
       .select()
       .from(classifications)
@@ -43,7 +41,7 @@ export class DrizzleClassificationsRepository implements IClassificationsReposit
       {
         name: data.name,
         description: data.description,
-        categoryType: data.categoryType as 'physical' | 'narrative' | 'abstract',
+        categoryType: data.categoryType,
       },
       data.id
     )

@@ -4,7 +4,7 @@ export const classificationDTOSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  categoryType: z.enum(['physical', 'narrative', 'abstract']),
+  categoryType: z.string(),
 })
 
 export type ClassificationDTO = z.infer<typeof classificationDTOSchema>
