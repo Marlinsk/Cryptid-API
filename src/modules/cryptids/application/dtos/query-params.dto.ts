@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
+const IMPLICIT_FIELDS = ['id'] as const
+
 export const ALLOWED_DETAIL_FIELDS = [
-  'id',
   'name',
   'aliases',
   'description',
@@ -152,6 +153,8 @@ export function parseFieldsOptions(fields?: string[]): FieldSelectionOptions {
 
 export function getInvalidFields(requestedFields: string[]): string[] {
   return requestedFields.filter(
-    field => !ALLOWED_DETAIL_FIELDS.includes(field as AllowedDetailField)
+    field =>
+      !ALLOWED_DETAIL_FIELDS.includes(field as AllowedDetailField) &&
+      !IMPLICIT_FIELDS.includes(field as (typeof IMPLICIT_FIELDS)[number])
   )
 }

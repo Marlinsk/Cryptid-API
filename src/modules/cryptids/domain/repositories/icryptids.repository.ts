@@ -1,6 +1,6 @@
 import type { PaginatedResult, PaginationParams, SortParams } from '@shared/types/pagination'
 import type { Cryptid } from '../entities/cryptid.entity'
-import type { Image } from '../entities/image.entity'
+import type { Image } from '@modules/images/domain/entities/image.entity'
 
 export interface ListCryptidsFilters {
   search?: string
@@ -42,14 +42,13 @@ export interface ICryptidsRepository {
     pagination: PaginationParams,
     sort: SortParams
   ): Promise<PaginatedResult<CryptidWithRelations>>
-  search(
-    query: string,
-    filters: Partial<ListCryptidsFilters>,
-    pagination: PaginationParams
-  ): Promise<PaginatedResult<CryptidWithRelations>>
   findRelated(
     cryptidId: number,
     relationType: 'sameClassification'
   ): Promise<CryptidWithRelations[]>
+  findImagesForCryptids(ids: number[]): Promise<Map<number, Image[]>>
+  findRelatedBatch(
+    items: { cryptidId: number; classificationId: number }[]
+  ): Promise<Map<number, CryptidWithRelations[]>>
   hasImages(cryptidId: number): Promise<boolean>
 }
