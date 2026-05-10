@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { cryptidSummarySchema } from './cryptid-summary.dto'
-import { imageSchema } from './image.dto'
+import { imageSchema } from '@modules/images/application/dtos/image.dto'
 
 export const cryptidDetailSchema = z.object({
   id: z.string(),

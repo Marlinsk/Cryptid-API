@@ -1,10 +1,10 @@
 import { db } from '@infra/database/connection'
 import { classifications, cryptids, images } from '@infra/database/schemas'
 import type { PaginatedResult, PaginationParams, SortParams } from '@shared/types/pagination'
-import { and, count, eq, exists, inArray, like, or, sql } from 'drizzle-orm'
+import { and, count, eq, exists, inArray, like, notInArray, or, sql } from 'drizzle-orm'
 import { injectable } from 'tsyringe'
 import { Cryptid } from '../../domain/entities/cryptid.entity'
-import { Image } from '../../domain/entities/image.entity'
+import { Image } from '@modules/images/domain/entities/image.entity'
 import type { CryptidWithRelations, ICryptidsRepository, IncludeRelations, ListCryptidsFilters } from '../../domain/repositories/icryptids.repository'
 
 @injectable()
@@ -90,6 +90,78 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
     return response
   }
 
+  async findImagesForCryptids(ids: number[]): Promise<Map<number, Image[]>> {
+    if (ids.length === 0) return new Map()
+
+    const rows = await db.select().from(images).where(inArray(images.cryptidId, ids))
+
+    const map = new Map<number, Image[]>()
+    for (const row of rows) {
+      const list = map.get(row.cryptidId) ?? []
+      list.push(this.mapImageToDomain(row))
+      map.set(row.cryptidId, list)
+    }
+    return map
+  }
+
+  async findRelatedBatch(
+    items: { cryptidId: number; classificationId: number }[]
+  ): Promise<Map<number, CryptidWithRelations[]>> {
+    if (items.length === 0) return new Map()
+
+    const cryptidIds = items.map(i => i.cryptidId)
+    const classificationIds = [...new Set(items.map(i => i.classificationId))]
+
+    const relatedData = await db
+      .select({
+        cryptid: cryptids,
+        classification: classifications.name,
+      })
+      .from(cryptids)
+      .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
+      .where(
+        and(
+          inArray(cryptids.classificationId, classificationIds),
+          notInArray(cryptids.id, cryptidIds)
+        )
+      )
+
+    if (relatedData.length === 0) {
+      const result = new Map<number, CryptidWithRelations[]>()
+      for (const item of items) result.set(item.cryptidId, [])
+      return result
+    }
+
+    const relatedCryptidIds = relatedData.map(r => r.cryptid.id)
+    const imagesRows = await db
+      .selectDistinct({ cryptidId: images.cryptidId })
+      .from(images)
+      .where(inArray(images.cryptidId, relatedCryptidIds))
+
+    const hasImagesSet = new Set(imagesRows.map(i => i.cryptidId))
+
+    const byClassification = new Map<number, CryptidWithRelations[]>()
+    for (const row of relatedData) {
+      const classId = row.cryptid.classificationId
+      const list = byClassification.get(classId) ?? []
+      list.push({
+        cryptid: this.mapToDomain(row.cryptid),
+        classification: row.classification,
+        hasImages: hasImagesSet.has(row.cryptid.id),
+      })
+      byClassification.set(classId, list)
+    }
+
+    const result = new Map<number, CryptidWithRelations[]>()
+    for (const item of items) {
+      result.set(
+        item.cryptidId,
+        (byClassification.get(item.classificationId) ?? []).slice(0, 5)
+      )
+    }
+    return result
+  }
+
   async hasImages(cryptidId: number): Promise<boolean> {
     const result = await db
       .select({ id: images.id })
@@ -125,65 +197,6 @@ export class DrizzleCryptidsRepository implements ICryptidsRepository {
         .limit(pagination.limit)
         .offset(offset)
         .orderBy(this.buildOrderBy(sort)),
-      db
-        .select({ count: count() })
-        .from(cryptids)
-        .where(and(...conditions)),
-    ])
-
-    const totalItems = totalResult[0]?.count || 0
-    const totalPages = Math.ceil(totalItems / pagination.limit)
-
-    const dataWithRelations = await Promise.all(
-      data.map(async item => ({
-        cryptid: this.mapToDomain(item.cryptid),
-        classification: item.classification,
-        hasImages: await this.hasImages(item.cryptid.id),
-      }))
-    )
-
-    return {
-      data: dataWithRelations,
-      pagination: {
-        page: pagination.page,
-        limit: pagination.limit,
-        totalItems,
-        totalPages,
-        hasNext: pagination.page < totalPages,
-        hasPrevious: pagination.page > 1,
-      },
-    }
-  }
-
-  async search(
-    query: string,
-    filters: Partial<ListCryptidsFilters>,
-    pagination: PaginationParams
-  ): Promise<PaginatedResult<CryptidWithRelations>> {
-    const sanitizedQuery = this.sanitizeSearchQuery(query)
-
-    const searchCondition = or(
-      like(cryptids.name, `%${sanitizedQuery}%`),
-      like(cryptids.description, `%${sanitizedQuery}%`),
-      like(cryptids.originSummary, `%${sanitizedQuery}%`)
-    )
-
-    const conditions = this.buildWhereConditions(filters)
-    conditions.push(searchCondition)
-
-    const offset = (pagination.page - 1) * pagination.limit
-
-    const [data, totalResult] = await Promise.all([
-      db
-        .select({
-          cryptid: cryptids,
-          classification: classifications.name,
-        })
-        .from(cryptids)
-        .innerJoin(classifications, eq(cryptids.classificationId, classifications.id))
-        .where(and(...conditions))
-        .limit(pagination.limit)
-        .offset(offset),
       db
         .select({ count: count() })
         .from(cryptids)
